@@ -88,8 +88,8 @@ ssh -i ~/.ssh/awais_portfolio_deploy -p YOUR_SSH_PORT deploy@YOUR_VPS_IP "echo o
 | `VPS_HOST` | `203.0.113.10` | VPS IP or hostname |
 | `VPS_USER` | `deploy` | SSH user |
 | `VPS_SSH_KEY` | full private key PEM | **FIX THIS — was empty** |
-| `DEPLOY_PATH` | `/home/deploy/awais-portfolio` | Directory for this repo on VPS |
-| `DOCKER_NETWORK` | `syedtech-net` | **Add if missing** — from Syed Tech compose |
+| `DEPLOY_PATH` | `/home/deploy/awais-portfolio` | **Must be this subfolder** — not `/home/deploy` (Syed Tech is there) |
+| `DOCKER_NETWORK` | `syedtechsolutions_syedtech-net` | Run `docker network ls` on VPS to confirm |
 
 ### Recommended — set explicitly
 
@@ -215,6 +215,7 @@ Then hit `http://VPS_IP:274`. HTTPS still goes through Caddy + domain for normal
 |-------|-----|
 | `error in libcrypto` / `Permission denied` | `VPS_SSH_KEY` empty or malformed — re-paste full private key |
 | `Too many authentication failures` | Same — bad/empty key file written by CI |
-| `network syedtech-net not found` | Start Syed Tech stack first; set `DOCKER_NETWORK=syedtech-net` |
+| `network syedtech-net not found` | Set `DOCKER_NETWORK=syedtechsolutions_syedtech-net` (check `docker network ls`) |
+| `no configuration file provided` | Wrong directory — use `cd /home/deploy/awais-portfolio`, not `/home/deploy` |
 | Caddy 502 | `docker compose ps` in awais project; check `curl 127.0.0.1:274/healthz` |
 | Caddy can't reach app | Container name in Caddyfile must be `awais-portfolio-web` |
