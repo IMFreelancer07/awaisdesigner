@@ -1,221 +1,101 @@
-# Deploy Awais Portfolio (shared VPS with Syed Tech)
+# Deploy Awais Portfolio (standalone on port 274)
 
-## How the two sites fit together
+Independent from Syed Tech — no shared Caddy, no shared Docker network.
 
-```
-Internet
-   │
-   ▼
-┌─────────────────────────────────────────────────────────┐
-│  syedtech-caddy  (:80 / :443)  — ONE shared reverse proxy │
-└─────────────────────────────────────────────────────────┘
-   │                              │
-   │  syedtechsolutions.com       │  awaisdesigner.com
-   ▼                              ▼
-┌──────────────────┐    ┌──────────────────────────┐
-│  syedtech-web    │    │  awais-portfolio-web     │
-│  nginx :786      │    │  nginx :274              │
-│  127.0.0.1:786   │    │  127.0.0.1:274           │
-└──────────────────┘    └──────────────────────────┘
-         └──────────── syedtech-net (Docker network) ────────────┘
-```
+| | Syed Tech | Awais Portfolio |
+|--|-----------|-----------------|
+| **Path** | `/home/deploy/main-website/syedtechsolutions` | `/home/deploy/awais-portfolio` |
+| **App port** | 786 (loopback) | **274 (public)** |
+| **Public access** | Caddy :80 / :443 | **Direct :274** |
+| **Config changes** | None needed | This project only |
 
-| Site | Container | Internal port | Host loopback | Public access |
-|------|-----------|---------------|---------------|---------------|
-| Syed Tech | `syedtech-web` | 786 | `127.0.0.1:786` | `https://syedtech-domain` via Caddy |
-| Awais Portfolio | `awais-portfolio-web` | 274 | `127.0.0.1:274` | `https://awais-domain` via Caddy |
-
-Port **274 is not opened on the firewall** for public traffic (same as 786). Caddy on 80/443 terminates TLS and forwards to the container over `syedtech-net`.
+**Public URL:** `http://YOUR_VPS_IP:274`
 
 ---
 
-## Step 1 — Fix the workflow error (SSH key)
+## GitHub Secrets
 
-Your log shows:
+### Required
 
-```
-VPS_SSH_KEY:
-Load key ".../deploy_key": error in libcrypto
-Permission denied
-```
+| Secret | Example |
+|--------|---------|
+| `VPS_HOST` | VPS IP |
+| `VPS_USER` | `deploy` |
+| `VPS_SSH_KEY` | private key |
+| `DEPLOY_PATH` | `/home/deploy/awais-portfolio` |
 
-**`VPS_SSH_KEY` is empty or invalid.** GitHub masked it but the value is blank.
+### Optional
 
-### Generate a key (on your Mac)
-
-```bash
-ssh-keygen -t ed25519 -C "github-actions-awais-portfolio" -f ~/.ssh/awais_portfolio_deploy -N ""
-```
-
-### Install the public key on the VPS
-
-```bash
-ssh-copy-id -i ~/.ssh/awais_portfolio_deploy.pub -p YOUR_SSH_PORT deploy@YOUR_VPS_IP
-```
-
-### Add the private key to GitHub
-
-```bash
-cat ~/.ssh/awais_portfolio_deploy
-```
-
-Copy **everything**, including:
-
-```
------BEGIN OPENSSH PRIVATE KEY-----
-...
------END OPENSSH PRIVATE KEY-----
-```
-
-Paste into: **GitHub repo → Settings → Secrets → Actions → `VPS_SSH_KEY`**
-
-> If you use the **`production` environment**, add the secret there too (environment secrets override repo secrets).
-
-### Test locally before re-running CI
-
-```bash
-ssh -i ~/.ssh/awais_portfolio_deploy -p YOUR_SSH_PORT deploy@YOUR_VPS_IP "echo ok"
-```
-
----
-
-## Step 2 — All GitHub Secrets (checklist)
-
-### Required — must be set
-
-| Secret | Example | Status / notes |
-|--------|---------|----------------|
-| `VPS_HOST` | `203.0.113.10` | VPS IP or hostname |
-| `VPS_USER` | `deploy` | SSH user |
-| `VPS_SSH_KEY` | full private key PEM | **FIX THIS — was empty** |
-| `DEPLOY_PATH` | `/home/deploy/awais-portfolio` | **Must be this subfolder** — not `/home/deploy` (Syed Tech is there) |
-| `DOCKER_NETWORK` | `syedtechsolutions_syedtech-net` | Run `docker network ls` on VPS to confirm |
-
-### Recommended — set explicitly
-
-| Secret | Value for this site |
-|--------|---------------------|
-| `VPS_SSH_PORT` | your SSH port (you already have this) |
+| Secret | Default |
+|--------|---------|
+| `VPS_SSH_PORT` | `22` |
 | `WEB_PORT` | `274` |
 | `WEB_CONTAINER_NAME` | `awais-portfolio-web` |
 | `IMAGE_NAME` | `awais-portfolio/web:latest` |
 
-### Not used by this project — safe to delete
+### No longer needed — delete from GitHub
 
-| Secret | Why |
-|--------|-----|
-| `CADDY_CONTAINER_NAME` | Shared Caddy belongs to Syed Tech stack |
-| `PUBLIC_PORT` | No public port; Caddy handles 80/443 |
-| `SITE_DOMAIN` | Set in Syed Tech Caddyfile, not CI |
-| `ACME_EMAIL` | Already on Syed Tech Caddy |
-
-### GitHub environment
-
-Create **`production`** under Settings → Environments (workflow requires it).
+- `DOCKER_NETWORK`
+- `CADDY_CONTAINER_NAME`
+- `PUBLIC_PORT`
+- `SITE_DOMAIN`
+- `ACME_EMAIL`
 
 ---
 
-## Step 3 — VPS one-time setup
-
-```bash
-# As root/sudo on VPS
-sudo mkdir -p /home/deploy/awais-portfolio   # match DEPLOY_PATH secret
-sudo chown deploy:deploy /home/deploy/awais-portfolio
-
-# Confirm Syed Tech stack is running and network exists
-docker network ls | grep syedtech-net
-docker ps | grep syedtech
-```
-
----
-
-## Step 4 — Add the route in the existing Caddyfile
-
-SSH to the VPS and edit the **Syed Tech** Caddyfile (where `syedtech-web:786` is already configured).
-
-Find the existing block (pattern):
-
-```caddy
-syedtechsolutions.com {
-    reverse_proxy web:786
-}
-```
-
-Add a **new block** for Awais (below it):
-
-```caddy
-awaisdesigner.com {
-    encode gzip
-    reverse_proxy awais-portfolio-web:274
-}
-```
-
-Use your real domain. The hostname `awais-portfolio-web` must match `WEB_CONTAINER_NAME`.
-
-Reload Caddy:
-
-```bash
-cd /path/to/syedtech-compose
-docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
-```
-
-Point DNS **A record** for `awaisdesigner.com` → VPS IP (same IP as Syed Tech).
-
----
-
-## Step 5 — Deploy
-
-Push to `main` or run **Actions → Deploy to VPS → Run workflow**.
-
-CI will:
-
-1. rsync code → `DEPLOY_PATH`
-2. write `.env` from secrets
-3. `docker compose up -d --build web`
-4. curl `http://127.0.0.1:274/healthz`
-
----
-
-## Step 6 — Verify
-
-On the VPS:
-
-```bash
-cd $DEPLOY_PATH   # your DEPLOY_PATH
-docker compose ps
-curl -s http://127.0.0.1:274/healthz    # → ok
-
-docker network inspect syedtech-net --format '{{range .Containers}}{{.Name}} {{end}}'
-# should list both syedtech-web and awais-portfolio-web
-```
-
-From your machine:
-
-```bash
-curl -I https://awaisdesigner.com
-```
-
----
-
-## Optional: access via IP:274 (without domain)
-
-Only if you need direct IP access (not recommended for production):
+## VPS firewall (one time)
 
 ```bash
 sudo ufw allow 274/tcp
+sudo ufw reload
 ```
 
-Then hit `http://VPS_IP:274`. HTTPS still goes through Caddy + domain for normal use.
+Also open **274** in your cloud provider firewall.
+
+Syed Tech ports (22, 80, 443, 786 loopback) are unchanged.
+
+---
+
+## Cloudflare (optional)
+
+Orange-cloud proxy only supports certain HTTPS ports — **274 is not one of them**.
+
+Use one of:
+
+**A. Cloudflare Tunnel** (recommended for HTTPS on a domain)
+
+In your tunnel config, add a public hostname:
+
+- **Hostname:** `awaisdesigner.com`
+- **Service:** `http://127.0.0.1:274`
+
+No changes to Syed Tech Caddy or tunnel entries.
+
+**B. Direct access**
+
+`http://YOUR_VPS_IP:274` — no Cloudflare needed.
+
+---
+
+## Deploy
+
+Push to `main` or run **Actions → Deploy to VPS**.
+
+Verify:
+
+```bash
+cd /home/deploy/awais-portfolio
+docker compose ps
+curl -s http://127.0.0.1:274/healthz    # → ok
+curl -I http://YOUR_VPS_IP:274          # from your machine
+```
 
 ---
 
 ## Troubleshooting
 
-| Error | Fix |
-|-------|-----|
-| `error in libcrypto` / `Permission denied` | `VPS_SSH_KEY` empty or malformed — re-paste full private key |
-| `Too many authentication failures` | Same — bad/empty key file written by CI |
-| `network syedtech-net not found` | Set `DOCKER_NETWORK=syedtechsolutions_syedtech-net` (check `docker network ls`) |
-| `no configuration file provided` | Wrong directory — use `cd /home/deploy/awais-portfolio`, not `/home/deploy` |
-| Caddy 502 | `docker compose ps` in awais project; check `curl 127.0.0.1:274/healthz` |
-| Caddy can't reach app | Container name in Caddyfile must be `awais-portfolio-web` |
+| Problem | Fix |
+|---------|-------|
+| Connection refused on :274 | `sudo ufw allow 274/tcp`; check cloud firewall |
+| Syed Tech broken | This stack is isolated — check Syed Tech compose separately |
+| Port conflict | Only one service can bind :274 — `docker ps` and stop duplicates |

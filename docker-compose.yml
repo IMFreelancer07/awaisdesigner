@@ -1,12 +1,11 @@
 # ─────────────────────────────────────────────────────────────
-#  Awais Portfolio — web container only
+#  Awais Portfolio — standalone web container
 #
-#  Matches the shared-VPS pattern used by your other site:
-#    web  — nginx on :274, bound to 127.0.0.1:274 on the host
-#           also reachable as awais-portfolio-web:274 on the proxy network
+#  Independent from Syed Tech (port 786 / Caddy 80/443):
+#    web  — nginx on :274, published publicly on host :274
 #
-#  The existing Caddy instance (ports 80/443) routes your domain here.
-#  See deploy/Caddyfile.snippet for the block to add on the main site.
+#  Syed Tech is untouched. No shared Docker network or Caddy import.
+#  Public URL: http://YOUR_VPS_IP:274  (or Cloudflare Tunnel → :274)
 #
 #  CI writes .env from GitHub Secrets; manual: cp .env.example .env
 # ─────────────────────────────────────────────────────────────
@@ -20,7 +19,7 @@ services:
     restart: unless-stopped
 
     ports:
-      - "127.0.0.1:${WEB_PORT:-274}:${WEB_PORT:-274}"
+      - "${WEB_PORT:-274}:${WEB_PORT:-274}"
 
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:${WEB_PORT:-274}/healthz || exit 1"]
@@ -34,13 +33,3 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-
-    networks:
-      - default
-      - proxy
-
-networks:
-  default:
-  proxy:
-    external: true
-    name: ${DOCKER_NETWORK}

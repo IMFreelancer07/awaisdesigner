@@ -25,13 +25,11 @@ jobs:
           [ -z "${{ secrets.VPS_USER }}" ] && missing+=("VPS_USER")
           [ -z "${{ secrets.VPS_SSH_KEY }}" ] && missing+=("VPS_SSH_KEY")
           [ -z "${{ secrets.DEPLOY_PATH }}" ] && missing+=("DEPLOY_PATH")
-          [ -z "${{ secrets.DOCKER_NETWORK }}" ] && missing+=("DOCKER_NETWORK")
           if [ "${#missing[@]}" -gt 0 ]; then
             echo "::error::Missing or empty secrets: ${missing[*]}"
             exit 1
           fi
           echo "Deploy path: ${{ secrets.DEPLOY_PATH }}"
-          echo "Docker network: ${{ secrets.DOCKER_NETWORK }}"
 
       - name: Configure SSH
         env:
@@ -86,13 +84,12 @@ jobs:
           WEB_PORT: ${{ secrets.WEB_PORT }}
           IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
           WEB_CONTAINER_NAME: ${{ secrets.WEB_CONTAINER_NAME }}
-          DOCKER_NETWORK: ${{ secrets.DOCKER_NETWORK }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_SSH_PORT || 22 }}
-          envs: DEPLOY_PATH,WEB_PORT,IMAGE_NAME,WEB_CONTAINER_NAME,DOCKER_NETWORK
+          envs: DEPLOY_PATH,WEB_PORT,IMAGE_NAME,WEB_CONTAINER_NAME
           script: |
             set -euo pipefail
 
@@ -113,21 +110,13 @@ jobs:
             WEB_PORT=${WEB_PORT:-274}
             IMAGE_NAME=${IMAGE_NAME:-awais-portfolio/web:latest}
             WEB_CONTAINER_NAME=${WEB_CONTAINER_NAME:-awais-portfolio-web}
-            DOCKER_NETWORK=${DOCKER_NETWORK}
             EOF
 
             echo "=== .env ==="
             cat .env
 
-            if ! docker network inspect "${DOCKER_NETWORK}" >/dev/null 2>&1; then
-              echo "ERROR: Docker network not found: ${DOCKER_NETWORK}"
-              echo "Available networks:"
-              docker network ls
-              exit 1
-            fi
-
             docker compose up -d --build --remove-orphans web
             docker compose ps
             curl -fsS "http://127.0.0.1:${WEB_PORT:-274}/healthz"
             echo ""
-            echo "Deploy OK: ${DEPLOY_PATH}"
+            echo "Deploy OK: http://$(hostname -I | awk '{print $1}'):${WEB_PORT:-274}"
