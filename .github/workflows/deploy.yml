@@ -119,6 +119,13 @@ jobs:
             echo "=== .env ==="
             cat .env
 
+            if ! docker network inspect "${DOCKER_NETWORK}" >/dev/null 2>&1; then
+              echo "ERROR: Docker network not found: ${DOCKER_NETWORK}"
+              echo "Available networks:"
+              docker network ls
+              exit 1
+            fi
+
             docker compose up -d --build --remove-orphans web
             docker compose ps
             curl -fsS "http://127.0.0.1:${WEB_PORT:-274}/healthz"
