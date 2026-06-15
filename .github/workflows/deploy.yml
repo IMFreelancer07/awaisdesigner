@@ -1,0 +1,74 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_SSH_PORT: ${{ secrets.VPS_SSH_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H -p "${VPS_SSH_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+
+      - name: Sync files to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_PORT: ${{ secrets.VPS_SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          rsync -avz --delete \
+            --exclude .git \
+            --exclude node_modules \
+            --exclude dist \
+            --exclude .env \
+            -e "ssh -i ~/.ssh/deploy_key -p ${VPS_SSH_PORT:-22}" \
+            ./ "${VPS_USER}@${VPS_HOST}:${DEPLOY_PATH}/"
+
+      - name: Write .env and restart web container
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          WEB_PORT: ${{ secrets.WEB_PORT }}
+          IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+          WEB_CONTAINER_NAME: ${{ secrets.WEB_CONTAINER_NAME }}
+          DOCKER_NETWORK: ${{ secrets.DOCKER_NETWORK }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT || 22 }}
+          envs: DEPLOY_PATH,WEB_PORT,IMAGE_NAME,WEB_CONTAINER_NAME,DOCKER_NETWORK
+          script: |
+            set -euo pipefail
+            cd "${DEPLOY_PATH}"
+
+            cat > .env <<EOF
+            WEB_PORT=${WEB_PORT:-274}
+            IMAGE_NAME=${IMAGE_NAME:-awais-portfolio/web:latest}
+            WEB_CONTAINER_NAME=${WEB_CONTAINER_NAME:-awais-portfolio-web}
+            DOCKER_NETWORK=${DOCKER_NETWORK}
+            EOF
+
+            docker compose up -d --build --remove-orphans web
+            docker compose ps
+            curl -fsS "http://127.0.0.1:${WEB_PORT:-274}/healthz"

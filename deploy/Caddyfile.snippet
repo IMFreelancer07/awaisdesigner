@@ -1,0 +1,10 @@
+# Add this block to the EXISTING Caddyfile on your VPS
+# (the one that already serves your other website on :80/:443).
+#
+# Replace the domain with your SITE_DOMAIN secret value.
+# Caddy reaches this app over the shared Docker network.
+
+{$SITE_DOMAIN} {
+	encode gzip
+	reverse_proxy awais-portfolio-web:274
+}
