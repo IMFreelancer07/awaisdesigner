@@ -18,6 +18,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate required secrets
+        run: |
+          missing=()
+          [ -z "${{ secrets.VPS_HOST }}" ] && missing+=("VPS_HOST")
+          [ -z "${{ secrets.VPS_USER }}" ] && missing+=("VPS_USER")
+          [ -z "${{ secrets.VPS_SSH_KEY }}" ] && missing+=("VPS_SSH_KEY")
+          [ -z "${{ secrets.DEPLOY_PATH }}" ] && missing+=("DEPLOY_PATH")
+          [ -z "${{ secrets.DOCKER_NETWORK }}" ] && missing+=("DOCKER_NETWORK")
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing or empty secrets: ${missing[*]}"
+            exit 1
+          fi
+
       - name: Configure SSH
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
