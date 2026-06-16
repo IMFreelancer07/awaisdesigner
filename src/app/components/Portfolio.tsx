@@ -9,19 +9,21 @@ import uiuxDesign from "../../imports/portfolio-uiux-design.jpg";
 
 /* ─── data ────────────────────────────────────────────────── */
 const categories = ["All", "Company Profile", "UI/UX", "Social Media", "Print"];
+const profileUrl = "https://www.behance.net/MAwaissiddiq";
 
 const projects = [
   {
     id: 1,
     num: "01",
-    title: "Company\nProfile",
+    title: "Company Profile\n& Branding",
     client: "Umrah Companions",
     category: "Company Profile",
     tag: "Brochure Design",
-    year: "2025",
+    year: "2024",
     img: companyProfile,
     accent: "#14A800",
     stat: "Brand deck",
+    caseStudyUrl: "https://www.behance.net/gallery/234706963/COMPANY-PROFILE",
     rotate: "-2deg",
     scale: 1,
     featured: true,
@@ -33,10 +35,11 @@ const projects = [
     client: "Taxi Website Design",
     category: "UI/UX",
     tag: "Web Design",
-    year: "2025",
+    year: "2024",
     img: uiuxDesign,
     accent: "#00C6FF",
     stat: "Full layout",
+    caseStudyUrl: "https://www.behance.net/gallery/228124911/Web-Design-for-Urban-Transport-Services",
     rotate: "3deg",
     scale: 0.88,
     featured: false,
@@ -44,14 +47,15 @@ const projects = [
   {
     id: 3,
     num: "03",
-    title: "Mobile Social\nMedia Post",
+    title: "Creative Ads\nDesigns",
     client: "AdWorld Prime",
     category: "Social Media",
     tag: "Post Design",
-    year: "2024",
+    year: "2023",
     img: socialMediaDesigns,
     accent: "#FF6B35",
     stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/233931545/Adworld-Prime-Affiliate-World-Conference",
     rotate: "-1.5deg",
     scale: 0.9,
     featured: false,
@@ -59,14 +63,15 @@ const projects = [
   {
     id: 4,
     num: "04",
-    title: "Clipboard\nMenu Card",
+    title: "Menu\nDesigns",
     client: "Buffet Menu Design",
     category: "Print",
     tag: "Menu Layout",
-    year: "2024",
+    year: "2022",
     img: restaurantFlyers,
     accent: "#A855F7",
     stat: "Menu ready",
+    caseStudyUrl: "https://www.behance.net/gallery/225653467/Menue-Design",
     rotate: "2.5deg",
     scale: 0.85,
     featured: false,
@@ -74,14 +79,15 @@ const projects = [
   {
     id: 5,
     num: "05",
-    title: "Menu Card\nMockup",
+    title: "Printing\nDesigns",
     client: "Restaurant Menu Design",
     category: "Print",
     tag: "Food Menu",
-    year: "2024",
+    year: "2020",
     img: foodMenu,
     accent: "#F59E0B",
     stat: "Print ready",
+    caseStudyUrl: "https://www.behance.net/gallery/171397863/PRINT-DESIGNS",
     rotate: "-3deg",
     scale: 0.87,
     featured: false,
@@ -324,21 +330,27 @@ function DetailPanel({ project, onClose }: { project: typeof projects[0]; onClos
 
         {/* Actions */}
         <div className="flex gap-2">
-          <motion.button
+          <motion.a
+            href={project.caseStudyUrl}
+            target="_blank"
+            rel="noreferrer"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-white text-xs"
             style={{ background: `linear-gradient(135deg,${project.accent},${project.accent}aa)`, fontWeight: 800, boxShadow: `0 4px 20px ${project.accent}35` }}
           >
             <Eye size={13} /> View Case Study
-          </motion.button>
-          <motion.button
+          </motion.a>
+          <motion.a
+            href={profileUrl}
+            target="_blank"
+            rel="noreferrer"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            className="px-4 py-2.5 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-all"
+            className="px-4 py-2.5 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-all flex items-center justify-center"
           >
             <ExternalLink size={13} />
-          </motion.button>
+          </motion.a>
         </div>
       </div>
     </motion.div>
