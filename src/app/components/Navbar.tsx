@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
 import logoMark from "../../imports/awais-logo-mark.png";
+import cvFile from "../../imports/awais-designer-cv.pdf";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -74,15 +75,17 @@ export function Navbar() {
               <div className="absolute bottom-0 left-0 w-0 h-px bg-[#14A800] group-hover:w-full transition-all duration-300" />
             </button>
           ))}
-          <motion.button
+          <motion.a
+            href={cvFile}
+            download="Awais-Designer-CV.pdf"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => handleNav("Contact", "#contact")}
-            className="ml-4 px-5 py-2 bg-[#14A800] text-white rounded-lg text-sm transition-all duration-200 hover:bg-[#0d8a00] hover:shadow-lg hover:shadow-[#14A800]/30"
+            className="ml-4 px-5 py-2 bg-[#14A800] text-white rounded-lg text-sm transition-all duration-200 hover:bg-[#0d8a00] hover:shadow-lg hover:shadow-[#14A800]/30 inline-flex items-center gap-2 whitespace-nowrap"
             style={{ fontWeight: 700 }}
           >
-            Hire Me
-          </motion.button>
+            <Download size={15} />
+            Download My CV
+          </motion.a>
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -117,13 +120,15 @@ export function Navbar() {
                   {link.label}
                 </button>
               ))}
-              <button
-                onClick={() => handleNav("Contact", "#contact")}
-                className="mt-2 py-3 px-4 bg-[#14A800] text-white rounded-lg text-sm"
+              <a
+                href={cvFile}
+                download="Awais-Designer-CV.pdf"
+                className="mt-2 py-3 px-4 bg-[#14A800] text-white rounded-lg text-sm inline-flex items-center justify-center gap-2"
                 style={{ fontWeight: 700 }}
               >
-                Hire Me
-              </button>
+                <Download size={16} />
+                Download My CV
+              </a>
             </div>
           </motion.div>
         )}
