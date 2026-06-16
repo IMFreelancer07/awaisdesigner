@@ -12,7 +12,6 @@ const services = [
       "Complete brand systems that speak before you do — logo, color theory, typography, voice, and a full usage guide that keeps your look consistent everywhere.",
     deliverables: ["Logo Suite (all formats)", "Color & Type System", "Brand Guidelines PDF", "Social Templates"],
     color: "#14A800",
-    from: "$499",
   },
   {
     num: "02",
@@ -23,7 +22,6 @@ const services = [
       "Interfaces that convert. I design pixel-perfect, user-tested screens for web and mobile products that feel natural, fast, and beautiful.",
     deliverables: ["Wireframes & User Flows", "High-fidelity Mockups", "Interactive Prototype", "Dev Handoff (Figma)"],
     color: "#00C6FF",
-    from: "$799",
   },
   {
     num: "03",
@@ -34,7 +32,6 @@ const services = [
       "Custom artwork that's uniquely yours — from icon sets and mascots to editorial illustrations and detailed vector scenes.",
     deliverables: ["Custom Vector Art", "Icon Sets (50+)", "Character Design", "Usage License"],
     color: "#A855F7",
-    from: "$299",
   },
   {
     num: "04",
@@ -45,7 +42,6 @@ const services = [
       "Print-ready designs built for impact — packaging that wins shelf space, brochures that get kept, and posters that stop people mid-step.",
     deliverables: ["Print-ready Files (PDF/AI)", "Packaging Mockups", "Fold/Die-cut Specs", "Printer Brief"],
     color: "#FF6B35",
-    from: "$399",
   },
   {
     num: "05",
@@ -56,7 +52,6 @@ const services = [
       "Scroll-stopping content systems — templates, campaign visuals, and story sets that grow your audience and make your feed unmistakable.",
     deliverables: ["30-Post Template Set", "Stories & Reels Format", "Campaign Banners", "Brand Voice Guide"],
     color: "#F59E0B",
-    from: "$249",
   },
   {
     num: "06",
@@ -67,7 +62,6 @@ const services = [
       "Animated logos, explainer videos, and motion assets that captivate in the first three seconds and keep viewers watching.",
     deliverables: ["Animated Logo (MP4/GIF)", "Explainer Video", "Social Motion Assets", "Source Files"],
     color: "#6FDA44",
-    from: "$599",
   },
 ];
 
@@ -242,9 +236,6 @@ export function Services() {
                   >
                     {current.title}
                   </h3>
-                  <div style={{ color: current.color, fontWeight: 700, fontSize: "0.8rem", marginTop: "2px" }}>
-                    Starting from {current.from}
-                  </div>
                 </div>
               </div>
 
