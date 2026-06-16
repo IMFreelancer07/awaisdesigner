@@ -190,9 +190,9 @@ export function Hero() {
 
   const headingPalette = ["solid-muted", "solid-white", "gradient-green"] as const;
   const headingWords = [
-    { text: "Graphic", d: 0.16 },
+    { text: "Creative", d: 0.16 },
     { text: "Designer", d: 0.28 },
-    { text: "& Branding", d: 0.40 },
+    { text: "& Consultant", d: 0.40 },
   ];
 
   return (
