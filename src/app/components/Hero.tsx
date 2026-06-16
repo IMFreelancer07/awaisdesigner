@@ -325,11 +325,11 @@ export function Hero() {
                 style={{ fontWeight: 800, fontSize: "0.92rem" }}
               >
                 <div className="absolute inset-0 rounded-lg"
-                  style={{ background: "linear-gradient(135deg,#14A800,#097300)" }} />
+                  style={{ background: "linear-gradient(135deg,#EF4444,#B91C1C)" }} />
                 <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: "linear-gradient(135deg,#1bd400,#0d8a00)" }} />
+                  style={{ background: "linear-gradient(135deg,#F87171,#DC2626)" }} />
                 <div className="absolute inset-0 rounded-lg pointer-events-none"
-                  style={{ boxShadow: "0 10px 36px rgba(20,168,0,0.5)" }} />
+                  style={{ boxShadow: "0 10px 36px rgba(239,68,68,0.5)" }} />
                 <span className="relative">View Portfolio</span>
                 <ArrowUpRight size={15} className="relative" />
               </motion.button>
