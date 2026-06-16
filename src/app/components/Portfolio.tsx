@@ -1,22 +1,27 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight, ExternalLink, Eye } from "lucide-react";
+import restaurantFlyers from "../../imports/portfolio-restaurant-flyers.jpg";
+import socialMediaDesigns from "../../imports/portfolio-social-media-designs.jpg";
+import foodMenu from "../../imports/portfolio-food-menu.jpg";
+import companyProfile from "../../imports/portfolio-company-profile.jpg";
+import uiuxDesign from "../../imports/portfolio-uiux-design.jpg";
 
 /* ─── data ────────────────────────────────────────────────── */
-const categories = ["All", "Branding", "UI/UX", "Print", "Illustration"];
+const categories = ["All", "Company Profile", "UI/UX", "Social Media", "Print"];
 
 const projects = [
   {
     id: 1,
     num: "01",
-    title: "NeoBank\nIdentity",
-    client: "NeoBank Financial",
-    category: "Branding",
-    tag: "Brand Strategy",
+    title: "Company\nProfile",
+    client: "Umrah Companions",
+    category: "Company Profile",
+    tag: "Brochure Design",
     year: "2025",
-    img: "https://images.unsplash.com/photo-1716471330463-f475b00f0506?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxicmFuZGluZyUyMGxvZ28lMjBkZXNpZ24lMjB3b3Jrc3BhY2V8ZW58MXx8fHwxNzgxNTA2OTkzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    img: companyProfile,
     accent: "#14A800",
-    stat: "+40% Trust",
+    stat: "Brand deck",
     rotate: "-2deg",
     scale: 1,
     featured: true,
@@ -24,14 +29,14 @@ const projects = [
   {
     id: 2,
     num: "02",
-    title: "Fintech\nApp UI",
-    client: "Rise Fintech",
+    title: "UI/UX\nScreen",
+    client: "Taxi Website Design",
     category: "UI/UX",
-    tag: "Mobile Design",
+    tag: "Web Design",
     year: "2025",
-    img: "https://images.unsplash.com/photo-1695048064952-44b984f2af6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxVSSUyMFVYJTIwZGVzaWduJTIwbW9ja3VwJTIwc2NyZWVuJTIwYXBwfGVufDF8fHx8MTc4MTUwNjk5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+    img: uiuxDesign,
     accent: "#00C6FF",
-    stat: "+60% CVR",
+    stat: "Full layout",
     rotate: "3deg",
     scale: 0.88,
     featured: false,
@@ -39,14 +44,14 @@ const projects = [
   {
     id: 3,
     num: "03",
-    title: "Artisan\nCoffee Co.",
-    client: "Artisan Roasters",
-    category: "Print",
-    tag: "Packaging",
+    title: "Mobile Social\nMedia Post",
+    client: "AdWorld Prime",
+    category: "Social Media",
+    tag: "Post Design",
     year: "2024",
-    img: "https://images.unsplash.com/photo-1591351659190-6258bbec984d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw1fHxncmFwaGljJTIwZGVzaWduJTIwY3JlYXRpdmUlMjBwb3J0Zm9saW8lMjBkYXJrfGVufDF8fHx8MTc4MTUwNjk5M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    img: socialMediaDesigns,
     accent: "#FF6B35",
-    stat: "3× Sales",
+    stat: "Campaign set",
     rotate: "-1.5deg",
     scale: 0.9,
     featured: false,
@@ -54,14 +59,14 @@ const projects = [
   {
     id: 4,
     num: "04",
-    title: "Logo Brand\nSystem",
-    client: "Global Agency",
-    category: "Branding",
-    tag: "Identity System",
+    title: "Clipboard\nMenu Card",
+    client: "Buffet Menu Design",
+    category: "Print",
+    tag: "Menu Layout",
     year: "2024",
-    img: "https://images.unsplash.com/photo-1506097425191-7ad538b29cef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxicmFuZGluZyUyMGxvZ28lMjBkZXNpZ24lMjB3b3Jrc3BhY2V8ZW58MXx8fHwxNzgxNTA2OTkzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    img: restaurantFlyers,
     accent: "#A855F7",
-    stat: "Global reach",
+    stat: "Menu ready",
     rotate: "2.5deg",
     scale: 0.85,
     featured: false,
@@ -69,14 +74,14 @@ const projects = [
   {
     id: 5,
     num: "05",
-    title: "Fashion\nWeek",
-    client: "Paris FW 2024",
-    category: "Illustration",
-    tag: "Editorial",
+    title: "Menu Card\nMockup",
+    client: "Restaurant Menu Design",
+    category: "Print",
+    tag: "Food Menu",
     year: "2024",
-    img: "https://images.unsplash.com/photo-1761746395593-5662bc22ca6b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw0fHxncmFwaGljJTIwZGVzaWduJTIwY3JlYXRpdmUlMjBwb3J0Zm9saW8lMjBkYXJrfGVufDF8fHx8MTc4MTUwNjk5M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    img: foodMenu,
     accent: "#F59E0B",
-    stat: "2M views",
+    stat: "Print ready",
     rotate: "-3deg",
     scale: 0.87,
     featured: false,
