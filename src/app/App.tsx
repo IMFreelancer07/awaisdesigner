@@ -5,6 +5,7 @@ import { Portfolio } from "./components/Portfolio";
 import { Services } from "./components/Services";
 import { Skills } from "./components/Skills";
 import { About } from "./components/About";
+import { Brands } from "./components/Brands";
 import { Testimonials } from "./components/Testimonials";
 import { FAQ } from "./components/FAQ";
 import { Contact } from "./components/Contact";
@@ -125,6 +126,7 @@ export default function App() {
         <Services />
         <Skills />
         <About />
+        <Brands />
         <Testimonials />
         <FAQ />
         <Contact />
