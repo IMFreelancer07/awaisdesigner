@@ -4,7 +4,7 @@ import {
   ArrowUpRight, MapPin,
   PenTool, Ruler, MousePointer2, Pipette, Type, Crop,
 } from "lucide-react";
-import awaisImg from "../../imports/WhatsApp_Image_2026-04-24_at_17.10.31.jpeg";
+import heroSectionImage from "../../imports/hero-section-image.png";
 
 /* ─── animated counter ────────────────────────────────────── */
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
@@ -316,37 +316,13 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="lg:hidden relative mx-auto mb-8 w-full max-w-[320px]"
+              className="lg:hidden relative mx-auto mb-8 w-full max-w-[360px]"
             >
-              <div
-                className="relative overflow-hidden rounded-[28px]"
-                style={{
-                  background: "rgba(8,8,18,0.96)",
-                  border: "1px solid rgba(20,168,0,0.22)",
-                  boxShadow: "0 18px 50px rgba(0,0,0,0.45)",
-                }}
-              >
-                <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(circle at top right, rgba(20,168,0,0.35), transparent 45%)" }} />
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="px-3 py-1 rounded-full border text-[#14A800]" style={{ borderColor: "rgba(20,168,0,0.25)", background: "rgba(20,168,0,0.08)", fontSize: "10px", fontWeight: 800, letterSpacing: "1.2px" }}>
-                      TOP RATED
-                    </div>
-                    <div className="text-[#A9FF9D]" style={{ fontSize: "10px", fontWeight: 800, letterSpacing: "1px" }}>
-                      200+ PROJECTS
-                    </div>
-                  </div>
-                  <div className="relative rounded-[22px] overflow-hidden border border-white/8">
-                    <img
-                      src={awaisImg}
-                      alt="Awais"
-                      className="w-full aspect-[4/4.5] object-cover"
-                      style={{ objectPosition: "center 10%", filter: "brightness(1.06) contrast(1.05) saturate(0.88)" }}
-                    />
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(3,3,10,0.7) 0%, transparent 55%)" }} />
-                  </div>
-                </div>
-              </div>
+              <img
+                src={heroSectionImage}
+                alt="Awais Designer hero visual"
+                className="w-full h-auto object-contain"
+              />
             </motion.div>
 
             {/* CTAs */}
@@ -416,183 +392,13 @@ export function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.1, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
             className="relative hidden lg:flex items-center justify-center flex-shrink-0"
-            style={{ width: 480, height: 520 }}
+            style={{ width: 700, maxWidth: "46vw" }}
           >
-
-            {/* ── spinning rings ── centered on 480×480 frame block ── */}
-            <div
-              className="absolute"
-              style={{ width: 480, height: 480, top: "50%", left: "50%", marginTop: -240, marginLeft: -240, overflow: "visible" }}
-            >
-              {/* outer dashed ring */}
-              <SpinRing size={468} color="rgba(20,168,0,0.09)"   duration={25}  dashed />
-              {/* middle solid */}
-              <SpinRing size={416} color="rgba(0,198,255,0.07)"  duration={32}  reverse />
-              {/* inner solid */}
-              <SpinRing size={364} color="rgba(168,85,247,0.06)" duration={42} />
-
-              {/* ── conic gradient halo ── */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                className="absolute rounded-full pointer-events-none"
-                style={{
-                  width: 448, height: 448,
-                  top: "50%", left: "50%",
-                  marginTop: -224, marginLeft: -224,
-                  background: "conic-gradient(from 0deg, #14A800 0%, #6FDA44 20%, #00C6FF 45%, transparent 60%, transparent 82%, #14A800 100%)",
-                  maskImage: "radial-gradient(circle, transparent 208px, black 210px, black 224px, transparent 226px)",
-                  WebkitMaskImage: "radial-gradient(circle, transparent 208px, black 210px, black 224px, transparent 226px)",
-                  filter: "blur(2px)",
-                  opacity: 0.9,
-                }}
-              />
-
-              {/* ── portrait circle ── */}
-              <div
-                className="absolute overflow-hidden rounded-full"
-                style={{
-                  width: 310, height: 310,
-                  top: "50%", left: "50%",
-                  marginTop: -155, marginLeft: -155,
-                  border: "2px solid rgba(20,168,0,0.4)",
-                  boxShadow: [
-                    "0 0 0 10px rgba(20,168,0,0.04)",
-                    "0 0 70px rgba(20,168,0,0.2)",
-                    "0 30px 80px rgba(0,0,0,0.6)",
-                    "inset 0 0 30px rgba(0,0,0,0.4)",
-                  ].join(", "),
-                }}
-              >
-                <img
-                  src={awaisImg}
-                  alt="Awais"
-                  className="w-full h-full object-cover"
-                  style={{ objectPosition: "center 10%", filter: "brightness(1.07) contrast(1.06) saturate(0.85)" }}
-                />
-                {/* inner vignette */}
-                <div className="absolute inset-0 rounded-full"
-                  style={{ background: "radial-gradient(circle, transparent 40%, rgba(3,3,10,0.6) 100%)" }} />
-              </div>
-
-              {/* ── orbiting glowing dots on outermost ring ── */}
-              {[
-                { color: "#14A800", startAngle: 0   },
-                { color: "#00C6FF", startAngle: 90  },
-                { color: "#A855F7", startAngle: 180 },
-                { color: "#F59E0B", startAngle: 270 },
-              ].map(({ color, startAngle }) => (
-                <motion.div
-                  key={startAngle}
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                  className="absolute pointer-events-none"
-                  style={{ inset: 0 }}
-                >
-                  <div
-                    className="absolute w-2.5 h-2.5 rounded-full"
-                    style={{
-                      top: (480 - 468) / 2,  // align to outer ring edge
-                      left: "50%",
-                      marginLeft: -5,
-                      transform: `rotate(${startAngle}deg)`,
-                      transformOrigin: `5px ${468 / 2}px`,
-                      background: color,
-                      boxShadow: `0 0 8px 2px ${color}80`,
-                    }}
-                  />
-                </motion.div>
-              ))}
-
-              {/* ── tool icon chips (fixed positions, no motion-transform conflict) ── */}
-              {tools.map((t) => <ToolIcon key={t.label} {...t} />)}
-            </div>
-
-            {/* ── achievement badges (relative to outer motion.div, not frame) ── */}
-
-            {/* TOP-RIGHT: Top Rated */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, x: 20 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ delay: 1.0, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-              className="absolute pointer-events-none"
-              style={{ top: 28, right: -48 }}
-            >
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                className="flex items-center gap-2.5 px-4 py-3 rounded-lg"
-                style={{
-                  background: "rgba(4,4,16,0.92)",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid rgba(20,168,0,0.28)",
-                  boxShadow: "0 16px 48px rgba(0,0,0,0.65), 0 0 0 1px rgba(20,168,0,0.07)",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: "rgba(20,168,0,0.15)", border: "1px solid rgba(20,168,0,0.3)" }}>
-                  <span style={{ fontSize: "16px" }}>★</span>
-                </div>
-                <div>
-                  <div className="text-white" style={{ fontWeight: 800, fontSize: "12px", lineHeight: 1 }}>Top Rated</div>
-                  <div className="text-[#14A800]" style={{ fontSize: "10px", fontWeight: 700, marginTop: "3px" }}>Luxury design badge</div>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* BOTTOM-LEFT: Projects done */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, x: -20 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ delay: 1.2, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-              className="absolute pointer-events-none"
-              style={{ bottom: 20, left: -52 }}
-            >
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 4.0, repeat: Infinity, ease: "easeInOut" }}
-                className="px-5 py-4 rounded-lg text-center"
-                style={{
-                  background: "rgba(4,4,16,0.92)",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid rgba(0,198,255,0.2)",
-                  boxShadow: "0 16px 48px rgba(0,0,0,0.65)",
-                  minWidth: "130px",
-                }}
-              >
-                <div className="text-[#00C6FF]" style={{ fontWeight: 900, fontSize: "2.1rem", lineHeight: 1, letterSpacing: "0" }}>200+</div>
-                <div className="text-[#A9FF9D]" style={{ fontSize: "9px", fontWeight: 800, marginTop: "5px", letterSpacing: "1px" }}>PROJECTS DONE</div>
-              </motion.div>
-            </motion.div>
-
-            {/* BOTTOM-RIGHT: Adobe certified */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 1.4, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-              className="absolute pointer-events-none"
-              style={{ bottom: 32, right: -36 }}
-            >
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg"
-                style={{
-                  background: "rgba(4,4,16,0.92)",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid rgba(255,124,0,0.2)",
-                  boxShadow: "0 8px 28px rgba(0,0,0,0.55)",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: "rgba(255,124,0,0.18)", border: "1px solid rgba(255,124,0,0.3)" }}>
-                  <span style={{ fontSize: "11px", fontWeight: 900, color: "#FF7C00" }}>Ai</span>
-                </div>
-                <span className="text-[#FF7C00]" style={{ fontSize: "11px", fontWeight: 800 }}>ACE Certified</span>
-              </motion.div>
-            </motion.div>
+            <img
+              src={heroSectionImage}
+              alt="Awais Designer hero visual"
+              className="w-full h-auto object-contain"
+            />
           </motion.div>
         </div>
       </motion.div>
