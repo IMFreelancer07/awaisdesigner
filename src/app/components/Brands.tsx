@@ -1,20 +1,26 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import affiliateWorldLogo from "../../imports/brand-affiliate-world-conferences.png";
+import adworldPrimeLogo from "../../imports/brand-adworld-prime.png";
+import istackLogo from "../../imports/brand-istack-conferences.png";
+import piaLogo from "../../imports/brand-pia.png";
+import umrahCompanionsLogo from "../../imports/brand-umrah-companions.png";
+import funadiqLogo from "../../imports/brand-funadiq.png";
+import nestleLogo from "../../imports/brand-nestle.png";
+import zindigiLogo from "../../imports/brand-zindigi.png";
+import taxiGuysLogo from "../../imports/brand-taxi-guys.png";
 
 const brands = [
-  { name: "PIA", mark: "PIA", detail: "Pakistan International" },
-  { name: "iSTACK CONFERENCES", mark: "iSTACK", detail: "Conferences" },
-  { name: "AFFILIATE WORLD CONFERENCES", mark: "Affiliate World", detail: "Conferences" },
-  { name: "FORMULA 1", mark: "Formula 1", detail: "Racing" },
-  { name: "ADWORLDPRIME", mark: "ADWORLD", detail: "Prime" },
-  { name: "FUNADIQ", mark: "FUNADIQ", detail: "Travel & Hospitality" },
-  { name: "UMRAHCOMPANIONS", mark: "UMRAH", detail: "Companions" },
-  { name: "UMRAH ZIYARAH", mark: "UMRAH", detail: "Ziyarah" },
-  { name: "NESTLE", mark: "NESTLE", detail: "Food & Beverage" },
-  { name: "ZINDIGI APP", mark: "ZINDIGI", detail: "App" },
-  { name: "ETISALAT", mark: "ETISALAT", detail: "Telecom" },
-  { name: "TAXI GUYS LIMITED", mark: "TAXI GUYS", detail: "Limited" },
+  { name: "Affiliate World Conferences", logo: affiliateWorldLogo },
+  { name: "Adworld Prime", logo: adworldPrimeLogo },
+  { name: "iStack Conferences", logo: istackLogo },
+  { name: "Pakistan International Airlines", logo: piaLogo },
+  { name: "Umrah Companions", logo: umrahCompanionsLogo },
+  { name: "Funadiq", logo: funadiqLogo },
+  { name: "Nestle", logo: nestleLogo },
+  { name: "Zindigi", logo: zindigiLogo },
+  { name: "Taxi Guys", logo: taxiGuysLogo },
 ];
 
 function visibleBrands(startIndex: number) {
@@ -96,29 +102,20 @@ export function Brands() {
               initial={{ opacity: 0, y: 18, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.38, delay: index * 0.04 }}
-              className={`${index === 0 ? "flex" : index < 3 ? "hidden sm:flex" : "hidden lg:flex"} min-h-[138px] rounded-lg border items-center justify-center text-center px-5 group`}
+              className={`${index === 0 ? "flex" : index < 3 ? "hidden sm:flex" : "hidden lg:flex"} min-h-[168px] rounded-lg border items-center justify-center text-center px-5 group`}
               style={{
                 background: "linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.02))",
                 borderColor: "rgba(255,255,255,0.08)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
               }}
             >
-              <div className="relative w-full">
+              <div className="relative w-full flex items-center justify-center">
                 <div className="absolute inset-x-6 -top-5 h-px opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "linear-gradient(90deg,transparent,#A9FF9D,transparent)" }} />
-                <div
-                  className="text-white uppercase"
-                  style={{
-                    fontWeight: 900,
-                    fontSize: brand.mark.length > 12 ? "1.15rem" : "1.45rem",
-                    lineHeight: 1,
-                    letterSpacing: brand.mark.length > 10 ? "0.02em" : "0.08em",
-                  }}
-                >
-                  {brand.mark}
-                </div>
-                <div className="mt-3 text-white/52 uppercase" style={{ fontSize: "9px", fontWeight: 800, letterSpacing: "0.18em" }}>
-                  {brand.detail}
-                </div>
+                <img
+                  src={brand.logo}
+                  alt={`${brand.name} logo`}
+                  className="w-full max-w-[150px] h-[112px] object-contain opacity-95 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105"
+                />
               </div>
             </motion.div>
           ))}
