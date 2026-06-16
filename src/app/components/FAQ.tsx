@@ -61,7 +61,7 @@ export function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="lg:sticky lg:top-24"
+            className="lg:sticky lg:top-24 text-center lg:text-left"
           >
             <div
               className="flex items-center gap-3 mb-6 text-[#14A800]"
@@ -111,7 +111,7 @@ export function FAQ() {
               whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="mt-10 px-6 py-4 rounded-2xl text-white inline-flex items-center gap-2"
+              className="mt-10 px-6 py-4 rounded-2xl text-white inline-flex items-center justify-center gap-2 w-full sm:w-auto"
               style={{
                 fontWeight: 800,
                 background: "linear-gradient(135deg,#14A800,#0D8A00)",
@@ -164,7 +164,7 @@ export function FAQ() {
                   <button
                     type="button"
                     onClick={() => setActiveId(isOpen ? "" : item.id)}
-                    className="w-full flex items-center gap-4 px-6 py-5 text-left"
+                      className="w-full flex items-start gap-3 sm:gap-4 px-4 sm:px-6 py-5 text-left"
                   >
                     <div
                       className="px-2.5 py-1 rounded-xl flex items-center justify-center"
@@ -180,7 +180,7 @@ export function FAQ() {
                       {item.id}
                     </div>
 
-                    <div className="flex-1 text-white" style={{ fontWeight: 800, fontSize: "1.35rem", lineHeight: 1.2 }}>
+                    <div className="flex-1 text-white" style={{ fontWeight: 800, fontSize: "clamp(1rem, 4vw, 1.35rem)", lineHeight: 1.2 }}>
                       {item.question}
                     </div>
 
@@ -238,7 +238,7 @@ export function FAQ() {
                 boxShadow: "0 16px 44px rgba(0,0,0,0.26)",
               }}
             >
-              <div>
+              <div className="text-center md:text-left">
                 <div className="text-white" style={{ fontWeight: 900, fontSize: "1.7rem", lineHeight: 1 }}>
                   Still not sure?
                 </div>
@@ -251,7 +251,7 @@ export function FAQ() {
                 whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-                className="px-7 py-4 rounded-2xl text-white whitespace-nowrap"
+                className="px-7 py-4 rounded-2xl text-white whitespace-nowrap w-full md:w-auto"
                 style={{
                   fontWeight: 800,
                   background: "linear-gradient(135deg,#1BD400,#119000)",

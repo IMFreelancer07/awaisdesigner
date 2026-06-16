@@ -119,14 +119,14 @@ export function Testimonials() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-12 flex justify-center"
         >
-          <div className="flex items-center gap-4 px-8 py-5 rounded-lg border border-[#14A800]/25"
+          <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4 px-6 sm:px-8 py-5 rounded-lg border border-[#14A800]/25"
             style={{ background: "rgba(20,168,0,0.06)" }}>
             <div className="w-12 h-12 rounded-lg bg-[#14A800] flex items-center justify-center shadow-[0_10px_30px_rgba(20,168,0,0.35)]">
               <span className="text-white" style={{ fontWeight: 900, fontSize: "18px" }}>★</span>
             </div>
             <div>
               <div className="text-white" style={{ fontWeight: 800, fontSize: "1rem" }}>Top Rated</div>
-              <div className="flex items-center gap-2 mt-0.5">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-0.5">
                 <span className="text-[#14A800]" style={{ fontWeight: 700, fontSize: "0.9rem" }}>Luxury service standard</span>
                 <span className="text-[#6868a0] text-sm">·</span>
                 <div className="flex items-center gap-1">

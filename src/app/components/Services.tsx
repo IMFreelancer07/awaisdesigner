@@ -122,9 +122,9 @@ export function Services() {
         </div>
 
         {/* Main layout: list + detail panel */}
-        <div className="grid md:grid-cols-5 gap-4">
+        <div className="grid lg:grid-cols-5 gap-4">
           {/* Left: service list */}
-          <div className="md:col-span-2 flex flex-col gap-2">
+          <div className="lg:col-span-2 flex flex-col gap-2">
             {services.map((s, i) => {
               const Icon = s.icon;
               const isActive = i === active;
@@ -185,7 +185,7 @@ export function Services() {
           </div>
 
           {/* Right: detail panel */}
-          <div className="md:col-span-3">
+          <div className="lg:col-span-3">
             <motion.div
               key={active}
               initial={{ opacity: 0, x: 24 }}
@@ -254,7 +254,7 @@ export function Services() {
                 >
                   WHAT'S INCLUDED
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {current.deliverables.map((d) => (
                     <div
                       key={d}

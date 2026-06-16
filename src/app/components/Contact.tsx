@@ -161,7 +161,7 @@ export function Contact() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="p-7 rounded-lg border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Your Name</label>
                     <input

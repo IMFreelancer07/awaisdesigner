@@ -199,8 +199,8 @@ export function Hero() {
     <section
       ref={ref}
       id="home"
-      className="relative flex items-center overflow-hidden"
-      style={{ background: "#03030A", minHeight: "115vh" }}
+      className="relative flex items-center overflow-hidden min-h-screen lg:min-h-[115vh]"
+      style={{ background: "#03030A" }}
     >
       {/* ── noise grain ── */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
@@ -241,17 +241,17 @@ export function Hero() {
 
       {/* ── page content ── */}
       <motion.div style={{ y: contentY, opacity: contentFade }} className="relative z-10 w-full">
-        <div className="max-w-7xl mx-auto px-6 lg:px-14 pt-40 pb-28
+        <div className="max-w-7xl mx-auto px-6 lg:px-14 pt-32 md:pt-36 lg:pt-40 pb-20 md:pb-24 lg:pb-28
                         grid lg:grid-cols-[1fr_auto] gap-12 xl:gap-20 items-center">
 
           {/* ════════════════ LEFT TEXT ════════════════ */}
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
 
             {/* status pill */}
             <motion.div
               initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.08 }}
-              className="inline-flex items-center gap-3 mb-10"
+              className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8 md:mb-10"
             >
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border"
                 style={{ background: "rgba(20,168,0,0.07)", borderColor: "rgba(20,168,0,0.2)" }}>
@@ -267,7 +267,7 @@ export function Hero() {
             </motion.div>
 
             {/* stacked headline */}
-            <div className="overflow-hidden mb-8">
+            <div className="overflow-hidden mb-6 md:mb-8">
               {headingWords.map(({ text, d }, index) => {
                 const colorMode = headingPalette[(index + headingShift) % headingPalette.length];
 
@@ -305,18 +305,55 @@ export function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.55 }}
-              className="text-[#A9FF9D] mb-10 max-w-lg"
+              className="text-[#A9FF9D] mb-8 md:mb-10 max-w-lg mx-auto lg:mx-0"
               style={{ lineHeight: 1.9, fontSize: "1rem", fontWeight: 500 }}
             >
               I turn ambitious ideas into iconic visual identities — specializing in brand strategy,
               UI/UX design, and systems that generate measurable results.
             </motion.p>
 
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="lg:hidden relative mx-auto mb-8 w-full max-w-[320px]"
+            >
+              <div
+                className="relative overflow-hidden rounded-[28px]"
+                style={{
+                  background: "rgba(8,8,18,0.96)",
+                  border: "1px solid rgba(20,168,0,0.22)",
+                  boxShadow: "0 18px 50px rgba(0,0,0,0.45)",
+                }}
+              >
+                <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(circle at top right, rgba(20,168,0,0.35), transparent 45%)" }} />
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="px-3 py-1 rounded-full border text-[#14A800]" style={{ borderColor: "rgba(20,168,0,0.25)", background: "rgba(20,168,0,0.08)", fontSize: "10px", fontWeight: 800, letterSpacing: "1.2px" }}>
+                      TOP RATED
+                    </div>
+                    <div className="text-[#A9FF9D]" style={{ fontSize: "10px", fontWeight: 800, letterSpacing: "1px" }}>
+                      200+ PROJECTS
+                    </div>
+                  </div>
+                  <div className="relative rounded-[22px] overflow-hidden border border-white/8">
+                    <img
+                      src={awaisImg}
+                      alt="Awais"
+                      className="w-full aspect-[4/4.5] object-cover"
+                      style={{ objectPosition: "center 10%", filter: "brightness(1.06) contrast(1.05) saturate(0.88)" }}
+                    />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(3,3,10,0.7) 0%, transparent 55%)" }} />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
             {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.65 }}
-              className="flex flex-wrap gap-3 mb-14"
+              className="flex flex-wrap justify-center lg:justify-start gap-3 mb-10 md:mb-14"
             >
               <motion.button
                 whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
@@ -350,15 +387,15 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.8 }}
             >
               <div className="w-20 h-px mb-7" style={{ background: "rgba(20,168,0,0.2)" }} />
-              <div className="flex items-center">
+              <div className="grid grid-cols-2 gap-y-4 sm:flex sm:flex-wrap sm:justify-center lg:justify-start items-center">
                 {[
                   { to: 200, suffix: "+", label: "Projects",    color: "#14A800" },
                   { to: 98,  suffix: "%", label: "Satisfaction", color: "#00C6FF" },
                   { to: 7,   suffix: "+", label: "Years Exp.",   color: "#A855F7" },
                   { to: 50,  suffix: "+", label: "Clients",      color: "#F59E0B" },
                 ].map((s, i) => (
-                  <div key={s.label} className="flex items-center">
-                    <div className="flex flex-col items-center px-5 first:pl-0 last:pr-0 text-center">
+                  <div key={s.label} className="flex items-center justify-center">
+                    <div className="flex flex-col items-center px-3 sm:px-5 first:pl-0 last:pr-0 text-center">
                       <div style={{ color: s.color, fontWeight: 900, fontSize: "1.75rem", letterSpacing: "0", lineHeight: 1 }}>
                         <Counter to={s.to} suffix={s.suffix} />
                       </div>
@@ -366,7 +403,7 @@ export function Hero() {
                         {s.label.toUpperCase()}
                       </div>
                     </div>
-                    {i < 3 && <div className="w-px h-7" style={{ background: "rgba(255,255,255,0.04)" }} />}
+                    {i < 3 && <div className="hidden sm:block w-px h-7" style={{ background: "rgba(255,255,255,0.04)" }} />}
                   </div>
                 ))}
               </div>
@@ -378,7 +415,7 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.82 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.1, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex items-center justify-center flex-shrink-0"
+            className="relative hidden lg:flex items-center justify-center flex-shrink-0"
             style={{ width: 480, height: 520 }}
           >
 

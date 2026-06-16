@@ -70,7 +70,7 @@ export function About() {
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-5 -right-5 px-5 py-4 rounded-lg"
+                className="absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 px-4 sm:px-5 py-3 sm:py-4 rounded-lg scale-90 sm:scale-100 origin-bottom-right"
                 style={{ background: "#13132A", border: "1px solid rgba(20,168,0,0.3)", boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}
               >
                 <div className="flex items-center gap-3">
@@ -88,10 +88,10 @@ export function About() {
               <motion.div
                 animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-4 -left-4 w-20 h-20 rounded-lg flex flex-col items-center justify-center"
+                className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-16 h-16 sm:w-20 sm:h-20 rounded-lg flex flex-col items-center justify-center"
                 style={{ background: "linear-gradient(135deg, #14A800, #0d8a00)", boxShadow: "0 8px 24px rgba(20,168,0,0.4)" }}
               >
-                <span className="text-white" style={{ fontSize: "1.8rem", fontWeight: 900, lineHeight: 1 }}>7+</span>
+                <span className="text-white" style={{ fontSize: "1.45rem", fontWeight: 900, lineHeight: 1 }}>7+</span>
                 <span className="text-white/80" style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "1px" }}>YEARS</span>
               </motion.div>
             </div>
@@ -159,7 +159,7 @@ export function About() {
         >
           <h3 className="text-center text-white mb-10" style={{ fontWeight: 800, fontSize: "1.3rem" }}>Career Journey</h3>
           <div className="relative">
-            <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-px" style={{ background: "rgba(20,168,0,0.2)" }} />
+            <div className="absolute left-5 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-px" style={{ background: "rgba(20,168,0,0.2)" }} />
             <div className="space-y-6">
               {timeline.map((item, i) => (
                 <motion.div
@@ -168,22 +168,22 @@ export function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.1 }}
-                  className={`flex items-center gap-6 ${i % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
+                  className={`relative flex items-center gap-4 md:gap-6 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
                 >
-                  <div className={`flex-1 ${i % 2 === 0 ? "text-right" : "text-left"}`}>
+                  <div className={`flex-1 pl-12 md:pl-0 text-left ${i % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
                     <div className="inline-block p-4 rounded-xl border border-white/5"
                       style={{ background: item.active ? "rgba(20,168,0,0.08)" : "rgba(255,255,255,0.02)", borderColor: item.active ? "rgba(20,168,0,0.25)" : undefined }}>
                       <div className="text-white" style={{ fontWeight: 800, fontSize: "0.95rem" }}>{item.role}</div>
                       <div className="text-[#6868a0] text-sm" style={{ fontWeight: 500 }}>{item.company}</div>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 relative z-10">
+                  <div className="flex-shrink-0 relative z-10 absolute left-0 md:static">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center"
                       style={{ background: item.active ? "#14A800" : "#1a1a2e", border: "2px solid", borderColor: item.active ? "#14A800" : "rgba(255,255,255,0.1)" }}>
                       <span className="text-white" style={{ fontSize: "11px", fontWeight: 900 }}>{item.year.slice(2)}</span>
                     </div>
                   </div>
-                  <div className="flex-1" />
+                  <div className="hidden md:block flex-1" />
                 </motion.div>
               ))}
             </div>

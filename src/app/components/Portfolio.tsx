@@ -440,8 +440,8 @@ export function Portfolio() {
 
                     {/* ROW 1: featured large + one tall card */}
                     {filtered[0] && (
-                      <div className="grid grid-cols-5 gap-4" style={{ height: "360px" }}>
-                        <div className="col-span-3">
+                      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:h-[360px]">
+                        <div className="md:col-span-3 h-[320px] sm:h-[360px] md:h-auto">
                           <CollageCard
                             project={filtered[0]}
                             onClick={() => handleCardClick(filtered[0].id)}
@@ -449,7 +449,7 @@ export function Portfolio() {
                           />
                         </div>
                         {filtered[1] && (
-                          <div className="col-span-2">
+                          <div className="md:col-span-2 h-[260px] sm:h-[300px] md:h-auto">
                             <CollageCard
                               project={filtered[1]}
                               onClick={() => handleCardClick(filtered[1].id)}
@@ -462,20 +462,15 @@ export function Portfolio() {
 
                     {/* ROW 2: three equal cards */}
                     {filtered.slice(2).length > 0 && (
-                      <div
-                        className={`grid gap-4`}
-                        style={{
-                          gridTemplateColumns: `repeat(${Math.min(filtered.slice(2).length, 3)}, 1fr)`,
-                          height: "260px",
-                        }}
-                      >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:h-[260px]">
                         {filtered.slice(2, 5).map((p, i) => (
-                          <CollageCard
-                            key={p.id}
-                            project={p}
-                            onClick={() => handleCardClick(p.id)}
-                            isSelected={selected === p.id}
-                          />
+                          <div key={p.id} className="h-[250px] sm:h-[260px] lg:h-auto">
+                            <CollageCard
+                              project={p}
+                              onClick={() => handleCardClick(p.id)}
+                              isSelected={selected === p.id}
+                            />
+                          </div>
                         ))}
                       </div>
                     )}
@@ -497,7 +492,7 @@ export function Portfolio() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="mt-6 flex items-center justify-between"
+                className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
               >
                 <div className="flex items-center gap-2 text-[#2a2a42]" style={{ fontSize: "11px", fontWeight: 700 }}>
                   <motion.div
