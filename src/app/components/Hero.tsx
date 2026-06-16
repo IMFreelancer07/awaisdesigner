@@ -305,7 +305,7 @@ export function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.55 }}
-              className="text-[#A9FF9D] mb-8 md:mb-10 max-w-lg mx-auto lg:mx-0"
+              className="text-white mb-8 md:mb-10 max-w-lg mx-auto lg:mx-0"
               style={{ lineHeight: 1.9, fontSize: "1rem", fontWeight: 500 }}
             >
               I turn ambitious ideas into iconic visual identities — specializing in brand strategy,
