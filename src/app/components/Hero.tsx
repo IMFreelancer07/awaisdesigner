@@ -260,7 +260,7 @@ export function Hero() {
                   AVAILABLE FOR WORK
                 </span>
               </div>
-              <div className="flex items-center gap-1 text-[#22223a]" style={{ fontSize: "11px", fontWeight: 700 }}>
+              <div className="flex items-center gap-1 text-[#A9FF9D]" style={{ fontSize: "11px", fontWeight: 700 }}>
                 <MapPin size={10} />
                 ISLAMABAD, PK
               </div>
@@ -290,8 +290,8 @@ export function Hero() {
                       WebkitTextFillColor: "transparent",
                     } : {
                       background: "transparent",
-                      WebkitTextFillColor: colorMode === "solid-white" ? "#ffffff" : "#1e1e38",
-                      color: colorMode === "solid-white" ? "#ffffff" : "#1e1e38",
+                      WebkitTextFillColor: colorMode === "solid-white" ? "#ffffff" : "#A9FF9D",
+                      color: colorMode === "solid-white" ? "#ffffff" : "#A9FF9D",
                     }),
                   }}
                 >
@@ -305,7 +305,7 @@ export function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.55 }}
-              className="text-[#3c3c5a] mb-10 max-w-lg"
+              className="text-[#A9FF9D] mb-10 max-w-lg"
               style={{ lineHeight: 1.9, fontSize: "1rem", fontWeight: 500 }}
             >
               I turn ambitious ideas into iconic visual identities — specializing in brand strategy,
@@ -362,7 +362,7 @@ export function Hero() {
                       <div style={{ color: s.color, fontWeight: 900, fontSize: "1.75rem", letterSpacing: "0", lineHeight: 1 }}>
                         <Counter to={s.to} suffix={s.suffix} />
                       </div>
-                      <div className="text-[#1e1e38] mt-1" style={{ fontSize: "9.5px", fontWeight: 800, letterSpacing: "1px" }}>
+                      <div className="text-[#A9FF9D] mt-1" style={{ fontSize: "9.5px", fontWeight: 800, letterSpacing: "1px" }}>
                         {s.label.toUpperCase()}
                       </div>
                     </div>
@@ -525,7 +525,7 @@ export function Hero() {
                 }}
               >
                 <div className="text-[#00C6FF]" style={{ fontWeight: 900, fontSize: "2.1rem", lineHeight: 1, letterSpacing: "0" }}>200+</div>
-                <div className="text-[#1e1e38]" style={{ fontSize: "9px", fontWeight: 800, marginTop: "5px", letterSpacing: "1px" }}>PROJECTS DONE</div>
+                <div className="text-[#A9FF9D]" style={{ fontSize: "9px", fontWeight: 800, marginTop: "5px", letterSpacing: "1px" }}>PROJECTS DONE</div>
               </motion.div>
             </motion.div>
 
