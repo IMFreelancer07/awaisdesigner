@@ -473,7 +473,7 @@ export function Hero() {
 
             {/* ── achievement badges (relative to outer motion.div, not frame) ── */}
 
-            {/* TOP-RIGHT: Top Rated Plus */}
+            {/* TOP-RIGHT: Top Rated */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5, x: 20 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -498,8 +498,8 @@ export function Hero() {
                   <span style={{ fontSize: "16px" }}>★</span>
                 </div>
                 <div>
-                  <div className="text-white" style={{ fontWeight: 800, fontSize: "12px", lineHeight: 1 }}>Top Rated Plus</div>
-                  <div className="text-[#14A800]" style={{ fontSize: "10px", fontWeight: 700, marginTop: "3px" }}>Upwork · 99% JSS</div>
+                  <div className="text-white" style={{ fontWeight: 800, fontSize: "12px", lineHeight: 1 }}>Top Rated</div>
+                  <div className="text-[#14A800]" style={{ fontSize: "10px", fontWeight: 700, marginTop: "3px" }}>Luxury design badge</div>
                 </div>
               </motion.div>
             </motion.div>

@@ -4,7 +4,7 @@ import logoMark from "../../imports/awais-logo-mark.png";
 
 const socials = [
   { Icon: Globe, label: "Google", color: "#34A853", href: "https://share.google/gFSnCdTL3AFuUqjPS" },
-  { Icon: Linkedin, label: "LinkedIn", color: "#0077B5", href: "https://www.linkedin.com/in/muhammad-awais-siddique/" },
+  { Icon: Linkedin, label: "LinkedIn", color: "#0077B5", href: "https://www.linkedin.com/in/muhammad-awais-graphic-designer-islamabad/" },
   { Icon: Facebook, label: "Facebook", color: "#1877F2", href: "https://www.facebook.com/M0hammadawaissiddique" },
   { Icon: Instagram, label: "Instagram", color: "#E1306C", href: "https://www.instagram.com/Muhammadawaissiddique/" },
   { Icon: Palette, label: "Behance", color: "#ffffff", href: "https://www.behance.net/MAwaissiddiq" },

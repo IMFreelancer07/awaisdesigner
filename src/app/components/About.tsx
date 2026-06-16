@@ -3,7 +3,7 @@ import { CheckCircle2, Award, Briefcase, Users } from "lucide-react";
 import aboutPortrait from "../../imports/awais-about-portrait.png";
 
 const highlights = [
-  "Top Rated Plus on Upwork (99% Job Success)",
+  "Top Rated creative professional",
   "Featured in Creative Bloq & Behance",
   "Adobe Certified Expert (ACE)",
   "7+ years delivering world-class design",
@@ -78,8 +78,8 @@ export function About() {
                     <Award size={18} color="white" />
                   </div>
                   <div>
-                    <div className="text-white text-sm" style={{ fontWeight: 800 }}>Top Rated Plus</div>
-                    <div className="text-[#14A800]" style={{ fontSize: "11px", fontWeight: 600 }}>Upwork Verified</div>
+                    <div className="text-white text-sm" style={{ fontWeight: 800 }}>Top Rated</div>
+                    <div className="text-[#14A800]" style={{ fontSize: "11px", fontWeight: 600 }}>Premium service badge</div>
                   </div>
                 </div>
               </motion.div>
