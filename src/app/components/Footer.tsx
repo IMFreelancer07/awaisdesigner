@@ -1,13 +1,13 @@
 import { motion } from "motion/react";
-import { Github, Linkedin, Twitter, Dribbble, Instagram, ArrowUp } from "lucide-react";
+import { Globe, Linkedin, Facebook, Instagram, Palette, ArrowUp } from "lucide-react";
 import logoMark from "../../imports/awais-logo-mark.png";
 
 const socials = [
-  { Icon: Linkedin, label: "LinkedIn", color: "#0077B5" },
-  { Icon: Dribbble, label: "Dribbble", color: "#EA4C89" },
-  { Icon: Instagram, label: "Instagram", color: "#E1306C" },
-  { Icon: Twitter, label: "Twitter", color: "#1DA1F2" },
-  { Icon: Github, label: "GitHub", color: "#ffffff" },
+  { Icon: Globe, label: "Google", color: "#34A853", href: "https://share.google/gFSnCdTL3AFuUqjPS" },
+  { Icon: Linkedin, label: "LinkedIn", color: "#0077B5", href: "https://www.linkedin.com/in/muhammad-awais-siddique/" },
+  { Icon: Facebook, label: "Facebook", color: "#1877F2", href: "https://www.facebook.com/M0hammadawaissiddique" },
+  { Icon: Instagram, label: "Instagram", color: "#E1306C", href: "https://www.instagram.com/Muhammadawaissiddique/" },
+  { Icon: Palette, label: "Behance", color: "#ffffff", href: "https://www.behance.net/MAwaissiddiq" },
 ];
 
 export function Footer() {
@@ -26,10 +26,12 @@ export function Footer() {
 
           {/* Socials */}
           <div className="flex items-center gap-3">
-            {socials.map(({ Icon, label, color }) => (
+            {socials.map(({ Icon, label, color, href }) => (
               <motion.a
                 key={label}
-                href="#"
+                href={href}
+                target="_blank"
+                rel="noreferrer"
                 whileHover={{ scale: 1.15, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 title={label}
