@@ -5,7 +5,7 @@ import { Mail, MapPin, Phone, Send, CheckCircle2 } from "lucide-react";
 const contactInfo = [
   { icon: Mail, label: "Email", value: "contact@awaisdesigner.com", color: "#14A800" },
   { icon: Phone, label: "WhatsApp", value: "+92 300 1234567", color: "#00C6FF" },
-  { icon: MapPin, label: "Location", value: "Lahore, Pakistan", color: "#A855F7" },
+  { icon: MapPin, label: "Location", value: "ISLAMABAD, PK", color: "#A855F7" },
 ];
 
 const leadEmail = "contact@awaisdesigner.com";

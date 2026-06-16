@@ -262,7 +262,7 @@ export function Hero() {
               </div>
               <div className="flex items-center gap-1 text-[#22223a]" style={{ fontSize: "11px", fontWeight: 700 }}>
                 <MapPin size={10} />
-                Lahore, PK
+                ISLAMABAD, PK
               </div>
             </motion.div>
 

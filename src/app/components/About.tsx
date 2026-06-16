@@ -105,7 +105,7 @@ export function About() {
             transition={{ duration: 0.7 }}
           >
             <p className="text-[#8888a8] mb-6" style={{ lineHeight: 1.9, fontSize: "1rem" }}>
-              I'm <span className="text-white" style={{ fontWeight: 700 }}>Awais</span>, a passionate graphic designer based in Lahore, Pakistan. Over the past 7+ years, I've helped 50+ brands around the globe transform their visual identity and stand out in crowded markets.
+              I'm <span className="text-white" style={{ fontWeight: 700 }}>Awais</span>, a passionate graphic designer based in ISLAMABAD, PK. Over the past 7+ years, I've helped 50+ brands around the globe transform their visual identity and stand out in crowded markets.
             </p>
             <p className="text-[#8888a8] mb-8" style={{ lineHeight: 1.9, fontSize: "1rem" }}>
               My approach blends strategic thinking with pixel-perfect execution. Whether it's a startup seeking a bold brand identity or an enterprise needing a full design overhaul — I deliver results that make an impact.

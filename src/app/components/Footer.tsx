@@ -57,7 +57,7 @@ export function Footer() {
         <div className="mt-8 pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-3 text-[#4a4a6a]"
           style={{ fontSize: "0.8rem", fontWeight: 500 }}>
           <span>© 2026 Awais Designer. All rights reserved.</span>
-          <span>Crafted with passion in Lahore, Pakistan</span>
+          <span>Crafted with passion in ISLAMABAD, PK</span>
           <div className="flex gap-4">
             <a href="#" className="hover:text-[#14A800] transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-[#14A800] transition-colors">Terms of Service</a>
