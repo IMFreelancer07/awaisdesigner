@@ -76,7 +76,7 @@ export function Hero() {
                 className="relative z-20 h-[52px] w-[104px] object-contain"
               />
               <span
-                className="relative z-20 -ml-[20px] grid h-[52px] w-[52px] place-items-center rounded-full border-2 border-black bg-[#14A800] font-['Montserrat'] text-[10px] font-extrabold leading-none text-white"
+                className="relative z-20 -ml-[20px] grid h-[52px] w-[52px] place-items-center rounded-full border-2 border-black bg-[#14A800] px-[4px] text-center font-['Montserrat'] text-[9px] font-extrabold leading-[1.05] text-white"
               >
                 Top Rated
               </span>
@@ -165,7 +165,7 @@ export function Hero() {
             <Sparkles size={34} fill="currentColor" />
           </motion.div>
 
-          <div className="mt-4 flex w-full max-w-[340px] flex-col gap-[14px] sm:flex-row lg:mt-[132px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
+          <div className="mt-4 flex w-full max-w-[340px] flex-col gap-[14px] sm:flex-row lg:mt-[178px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
             <motion.a
               href={cvFile}
               download="Awais-Designer-CV.pdf"
