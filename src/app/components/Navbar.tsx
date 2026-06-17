@@ -69,10 +69,10 @@ export function Navbar() {
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => handleNav("Portfolio", "#work")}
-          className="hidden h-10 items-center gap-2 rounded-full bg-[#14A800] pl-5 pr-2 font-['Montserrat'] text-[16px] font-bold text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:inline-flex"
+          className="hidden h-[42px] items-center gap-[9px] rounded-full bg-[#14A800] pl-[18px] pr-[6px] font-['Montserrat'] text-[14px] font-bold leading-none text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:inline-flex"
         >
           Portfolio
-          <span className="grid h-[27px] w-[27px] place-items-center rounded-full bg-white text-[#14A800]">
+          <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-white text-[#14A800]">
             <ArrowRight size={16} />
           </span>
         </motion.button>

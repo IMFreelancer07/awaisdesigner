@@ -1,8 +1,8 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Sparkles } from "lucide-react";
-import heroPortrait from "../../imports/figma-hero-portrait.png";
-import logoMark from "../../imports/awais-logo-mark.png";
 import cvFile from "../../imports/awais-designer-cv.pdf";
+import heroBadgeIcons from "../../imports/hero-badge-icons.png";
+import heroCenterComposite from "../../imports/hero-center-composite.png";
 
 const stats = [
   { value: "500+", label: "Satisfied Clients" },
@@ -18,6 +18,11 @@ const skills = [
   "Print Media Designer",
   "Social Media Manager",
 ];
+
+const marqueeWordStyle = {
+  fontFamily: "'Supertalls', 'Arial Narrow', Impact, sans-serif",
+  fontWeight: 400,
+} as const;
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -64,25 +69,20 @@ export function Hero() {
             className="hidden lg:block"
           >
             <div className="flex items-center">
-              <motion.img
-                src={heroPortrait}
+              <img
+                src={heroBadgeIcons}
                 alt=""
                 aria-hidden="true"
-                className="h-11 w-11 rounded-full object-cover"
-                style={{ objectPosition: "56% 22%" }}
-                animate={reduceMotion ? undefined : { y: [0, -4, 0] }}
-                transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+                className="relative z-20 h-[52px] w-[104px] object-contain"
               />
-              <motion.span
-                className="-ml-3 grid h-11 w-11 place-items-center rounded-full bg-white"
-                animate={reduceMotion ? undefined : { rotate: [0, 4, -4, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              <span
+                className="relative z-20 -ml-[20px] grid h-[52px] w-[52px] place-items-center rounded-full border-2 border-black bg-[#14A800] font-['Montserrat'] text-[10px] font-extrabold leading-none text-white"
               >
-                <img src={logoMark} alt="" aria-hidden="true" className="h-8 w-8 object-contain" />
-              </motion.span>
+                Top Rated
+              </span>
             </div>
-            <div className="mt-2 h-px w-[89px] bg-[#14A800]" />
-            <p className="mt-2 max-w-[140px] font-['Montserrat'] text-[14px] font-semibold leading-[1.2]">
+            <div className="mt-10 h-px w-[92px] bg-[#14A800]" />
+            <p className="mt-4 max-w-[186px] font-['Montserrat'] text-[14px] font-semibold leading-[1.2] text-white">
               Crafting Meaningful
               <br />
               Visual Experiences
@@ -106,7 +106,7 @@ export function Hero() {
                 </p>
                 {index < stats.length - 1 && (
                   <motion.div
-                    className="mt-5 h-px w-full bg-[#14A800]"
+                    className="mt-6 h-px w-full bg-[#14A800]"
                     initial={{ scaleX: 0, transformOrigin: "left" }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 0.7, delay: 0.5 + index * 0.12, ease: easeOut }}
@@ -124,33 +124,13 @@ export function Hero() {
             transition={{ duration: 0.75, ease: easeOut }}
             className="relative mt-4 flex min-h-[520px] w-full max-w-[745px] items-center justify-center sm:min-h-[640px] lg:mt-0 lg:min-h-[624px]"
           >
-            <h1
-              id="hero-heading"
-              className="absolute left-1/2 top-[39%] z-10 -translate-x-1/2 -translate-y-1/2 select-none text-center uppercase leading-[0.78] tracking-[-0.02em]"
-              style={{ fontFamily: "'Supertalls', 'Arial Narrow', Impact, sans-serif", fontWeight: 400 }}
-            >
-              <motion.span
-                className="block text-[clamp(5.8rem,16vw,11.65rem)] text-[#14A800]"
-                initial={{ opacity: 0, y: 54, clipPath: "inset(0 0 100% 0)" }}
-                animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
-                transition={{ duration: 0.9, delay: 0.22, ease: easeOut }}
-              >
-                Creative
-              </motion.span>
-              <motion.span
-                className="block text-[clamp(5.2rem,14.6vw,10.7rem)] text-transparent"
-                style={{ WebkitTextStroke: "clamp(1px, 0.18vw, 2px) #ffffff" }}
-                initial={{ opacity: 0, y: 54, clipPath: "inset(100% 0 0 0)" }}
-                animate={{ opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }}
-                transition={{ duration: 0.9, delay: 0.34, ease: easeOut }}
-              >
-                Designer
-              </motion.span>
+            <h1 id="hero-heading" className="sr-only">
+              Creative Designer
             </h1>
 
             <motion.img
-              src={heroPortrait}
-              alt="Awais Designer portrait"
+              src={heroCenterComposite}
+              alt="Creative Designer hero artwork"
               initial={{ opacity: 0, y: 34, scale: 0.98 }}
               animate={
                 reduceMotion
@@ -166,7 +146,7 @@ export function Hero() {
                       y: { duration: 5.4, delay: 1.05, repeat: Infinity, ease: "easeInOut" },
                     }
               }
-              className="relative z-20 h-auto w-[min(88vw,650px)] object-contain drop-shadow-[0_30px_80px_rgba(20,168,0,0.2)] sm:w-[610px] lg:w-[650px]"
+              className="relative z-20 h-auto w-[min(92vw,640px)] object-contain sm:w-[600px] lg:w-[640px]"
             />
           </motion.div>
         </div>
@@ -175,17 +155,17 @@ export function Hero() {
           initial={{ opacity: 0, x: 22 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.65, delay: 0.12, ease: easeOut }}
-          className="order-3 flex flex-col items-center gap-4 lg:mt-[177px] lg:items-start"
+          className="order-3 flex flex-col items-center gap-4 lg:mt-[124px] lg:items-center"
         >
           <motion.div
-            className="hidden h-16 w-16 place-items-center rounded-full border border-[#14A800] text-[#14A800] lg:grid lg:ml-[10px]"
+            className="hidden h-16 w-16 place-items-center rounded-full border border-[#14A800] text-[#14A800] lg:grid"
             animate={reduceMotion ? undefined : { rotate: 360, boxShadow: ["0 0 0 rgba(20,168,0,0)", "0 0 28px rgba(20,168,0,0.24)", "0 0 0 rgba(20,168,0,0)"] }}
             transition={{ rotate: { duration: 14, repeat: Infinity, ease: "linear" }, boxShadow: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }}
           >
             <Sparkles size={34} fill="currentColor" />
           </motion.div>
 
-          <div className="mt-4 flex w-full max-w-[340px] flex-col gap-[17px] sm:flex-row lg:mt-[167px] lg:max-w-[143px] lg:flex-col">
+          <div className="mt-4 flex w-full max-w-[340px] flex-col gap-[14px] sm:flex-row lg:mt-[132px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
             <motion.a
               href={cvFile}
               download="Awais-Designer-CV.pdf"
@@ -194,7 +174,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.62, ease: easeOut }}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-[#14A800] px-5 font-['Montserrat'] text-[15px] font-bold text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:text-[16px]"
+              className="inline-flex h-[46px] min-w-[146px] flex-1 items-center justify-center whitespace-nowrap rounded-full bg-[#14A800] px-5 font-['Montserrat'] text-[14px] font-bold leading-none text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:flex-none"
             >
               Download CV
             </motion.a>
@@ -206,7 +186,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.72, ease: easeOut }}
               onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-full border border-[#14A800] px-5 font-['Montserrat'] text-[15px] font-bold text-white transition-colors hover:bg-[#14A800]/16 lg:text-[16px]"
+              className="inline-flex h-[46px] min-w-[146px] flex-1 items-center justify-center rounded-full border border-[#14A800] px-5 font-['Montserrat'] text-[14px] font-bold leading-none text-white transition-colors hover:bg-[#14A800]/16 lg:flex-none"
             >
               Hire Me
             </motion.button>
@@ -230,7 +210,7 @@ export function Hero() {
             <div key={`${skill}-${index}`} className="flex shrink-0 items-center gap-[18px]">
               <span
                 className="text-[24px] uppercase leading-none text-white sm:text-[27px]"
-                style={{ fontFamily: "'Supertalls', 'Arial Narrow', Impact, sans-serif", fontWeight: 400 }}
+                style={marqueeWordStyle}
               >
                 {skill}
               </span>
