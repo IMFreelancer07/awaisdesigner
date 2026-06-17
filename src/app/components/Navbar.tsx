@@ -37,7 +37,7 @@ export function Navbar() {
         scrolled ? "bg-[#03030B]/88 backdrop-blur-md border-b border-white/8" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-[92px] w-full max-w-[1112px] items-center justify-between px-5 sm:px-8 xl:px-0">
+      <div className="mx-auto flex h-[92px] w-full max-w-[1138px] items-center justify-between px-5 sm:px-8 xl:px-0">
         <button
           type="button"
           onClick={() => handleNav("Home", "#home")}
@@ -60,13 +60,6 @@ export function Navbar() {
               style={{ color: active === link.label ? "#14A800" : undefined }}
             >
               {link.label}
-              {active === link.label && (
-                <motion.span
-                  layoutId="hero-nav-active"
-                  className="absolute -bottom-[9px] left-0 h-px w-full bg-[#14A800]"
-                  transition={{ duration: 0.25 }}
-                />
-              )}
             </button>
           ))}
         </nav>
@@ -76,10 +69,10 @@ export function Navbar() {
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => handleNav("Portfolio", "#work")}
-          className="hidden h-10 items-center gap-2 rounded-full bg-[#14A800] pl-5 pr-2 font-['Montserrat'] text-[16px] font-bold text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:inline-flex"
+          className="hidden h-[42px] items-center gap-[9px] rounded-full bg-[#14A800] pl-[18px] pr-[6px] font-['Montserrat'] text-[14px] font-bold leading-none text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:inline-flex"
         >
           Portfolio
-          <span className="grid h-[27px] w-[27px] place-items-center rounded-full bg-white text-[#14A800]">
+          <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-white text-[#14A800]">
             <ArrowRight size={16} />
           </span>
         </motion.button>
