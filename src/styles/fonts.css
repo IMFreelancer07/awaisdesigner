@@ -1,1 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap');
+
+@font-face {
+  font-family: 'Supertalls';
+  src:
+    url('../imports/fonts/Supertalls.otf') format('opentype'),
+    url('../imports/fonts/Supertalls.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

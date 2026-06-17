@@ -1,436 +1,244 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, animate } from "motion/react";
-import {
-  ArrowUpRight, MapPin,
-  PenTool, Ruler, MousePointer2, Pipette, Type, Crop,
-} from "lucide-react";
-import heroSectionImage from "../../imports/hero-section-image.png";
+import { motion, useReducedMotion } from "motion/react";
+import { Sparkles } from "lucide-react";
+import heroPortrait from "../../imports/figma-hero-portrait.png";
+import logoMark from "../../imports/awais-logo-mark.png";
+import cvFile from "../../imports/awais-designer-cv.pdf";
 
-/* ─── animated counter ────────────────────────────────────── */
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const [val, setVal] = useState(0);
-  const nodeRef = useRef<HTMLSpanElement>(null);
-  const seen = useRef(false);
-  useEffect(() => {
-    const el = nodeRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !seen.current) {
-        seen.current = true;
-        const ctrl = animate(0, to, {
-          duration: 1.8,
-          ease: [0.16, 1, 0.3, 1],
-          onUpdate: (v) => setVal(Math.round(v)),
-        });
-        return () => ctrl.stop();
-      }
-    });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to]);
-  return <span ref={nodeRef}>{val}{suffix}</span>;
-}
-
-/* ─── spinning dashed ring ────────────────────────────────── */
-function SpinRing({ size, color, duration, reverse = false, dashed = false }: {
-  size: number; color: string; duration: number; reverse?: boolean; dashed?: boolean;
-}) {
-  return (
-    <motion.div
-      animate={{ rotate: reverse ? -360 : 360 }}
-      transition={{ duration, repeat: Infinity, ease: "linear" }}
-      className="absolute rounded-full pointer-events-none"
-      style={{
-        width: size, height: size,
-        top: "50%", left: "50%",
-        marginTop: -size / 2, marginLeft: -size / 2,
-        border: dashed ? `1px dashed ${color}` : `1px solid ${color}`,
-        ...(!dashed && { borderTopColor: "transparent", borderRightColor: "transparent" }),
-      }}
-    />
-  );
-}
-
-/* ─── tool icon ───────────────────────────────────────────── */
-/*
-  KEY FIX: Never put `transform` in style on a motion.div — Motion owns that
-  property and will overwrite it during animation. Instead:
-    • outer plain <div>  → handles the STATIC position (left/top)
-    • first motion.div   → handles the ENTRY animation (opacity, scale)
-    • inner motion.div   → handles the FLOAT loop (y, x)
-*/
-const FRAME_CENTER = 240; // half of 480px frame
-const ICON_SIZE    = 56;
-
-interface ToolDef {
-  Icon: React.ElementType;
-  label: string;
-  color: string;
-  cx: number; cy: number;        // offset from frame center, px
-  floatY: number[];
-  floatX?: number[];
-  duration: number;
-  entryDelay: number;
-  rotateIcon?: number;
-}
-
-function ToolIcon({ Icon, label, color, cx, cy, floatY, floatX = [0,0,0], duration, entryDelay, rotateIcon = 0 }: ToolDef) {
-  const left = FRAME_CENTER + cx - ICON_SIZE / 2;
-  const top  = FRAME_CENTER + cy - ICON_SIZE / 2;
-
-  return (
-    <div
-      className="absolute pointer-events-none"
-      style={{ left, top, width: ICON_SIZE, height: ICON_SIZE, zIndex: 10 }}
-    >
-      {/* entry pop */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.2 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: entryDelay, duration: 0.65, ease: [0.34, 1.56, 0.64, 1] }}
-        className="w-full h-full"
-      >
-        {/* float loop */}
-        <motion.div
-          animate={{ y: floatY, x: floatX }}
-          transition={{ duration, repeat: Infinity, ease: "easeInOut", delay: entryDelay }}
-          className="relative w-full h-full rounded-lg flex items-center justify-center"
-          style={{
-            background: "rgba(4,4,16,0.9)",
-            backdropFilter: "blur(18px)",
-            border: `1px solid ${color}45`,
-            boxShadow: `0 6px 24px rgba(0,0,0,0.55), 0 0 0 1px ${color}12, inset 0 1px 0 rgba(255,255,255,0.05)`,
-          }}
-        >
-          {/* top glow */}
-          <div className="absolute inset-0 rounded-lg"
-            style={{ background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${color}28, transparent 70%)` }} />
-          <Icon
-            size={23}
-            color={color}
-            strokeWidth={1.5}
-            style={{ transform: `rotate(${rotateIcon}deg)`, position: "relative", zIndex: 1, flexShrink: 0 }}
-          />
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-}
-
-/* ─── tool positions ──────────────────────────────────────── */
-/*
-  Frame: 480 × 480 px, center at (240, 240).
-  Portrait circle radius: 155 px  → edge at 155 px from center
-  Ring radii: 184, 212, 240 px
-  Tools placed at radius ≈ 198 px → in the gap between ring-2 (212) and ring-1 (184)
-  This keeps them clearly OUTSIDE the portrait but INSIDE the outer ring.
-
-  Clock positions: 12, 2, 4, 6, 9, 11 o'clock
-  cx = r·sin(θ),  cy = -r·cos(θ)   (y axis points down)
-*/
-const R = 198;
-const tools: ToolDef[] = [
-  {
-    Icon: PenTool,
-    label: "PEN",       color: "#14A800",
-    cx: 0,              cy: -R,           // 12 o'clock
-    floatY: [0,-10,0],  duration: 3.2,    entryDelay: 1.1,
-  },
-  {
-    Icon: Ruler,
-    label: "RULER",     color: "#00C6FF",
-    cx: Math.round(R * Math.sin((2/6)*Math.PI)),
-    cy: Math.round(-R * Math.cos((2/6)*Math.PI)),  // ~2 o'clock
-    floatY: [0,-8,0],   floatX: [0,5,0],  duration: 3.8, entryDelay: 1.25,
-    rotateIcon: -40,
-  },
-  {
-    Icon: MousePointer2,
-    label: "SELECT",    color: "#A855F7",
-    cx: Math.round(R * Math.sin((4/6)*Math.PI)),
-    cy: Math.round(-R * Math.cos((4/6)*Math.PI)),  // ~4 o'clock
-    floatY: [0,9,0],    floatX: [0,5,0],  duration: 4.2, entryDelay: 1.4,
-  },
-  {
-    Icon: Pipette,
-    label: "PICKER",    color: "#F59E0B",
-    cx: 0,              cy: R,            // 6 o'clock
-    floatY: [0,10,0],   duration: 3.6,    entryDelay: 1.55,
-  },
-  {
-    Icon: Type,
-    label: "TYPE",      color: "#FF6B35",
-    cx: -R,             cy: 0,            // 9 o'clock
-    floatY: [0,7,0],    floatX: [0,-6,0], duration: 4.0, entryDelay: 1.7,
-  },
-  {
-    Icon: Crop,
-    label: "CROP",      color: "#6FDA44",
-    cx: Math.round(-R * Math.sin((2/6)*Math.PI)),
-    cy: Math.round(-R * Math.cos((2/6)*Math.PI)),  // ~10 o'clock
-    floatY: [0,-9,0],   floatX: [0,-5,0], duration: 3.4, entryDelay: 1.85,
-  },
+const stats = [
+  { value: "500+", label: "Satisfied Clients" },
+  { value: "250+", label: "Projects Done" },
+  { value: "2000+", label: "Media Featured" },
 ];
 
-/* ─── Hero ────────────────────────────────────────────────── */
+const skills = [
+  "Graphic Designer",
+  "UI/UX Designer",
+  "Motion Designer",
+  "Video Editor",
+  "Print Media Designer",
+  "Social Media Manager",
+];
+
+const easeOut = [0.16, 1, 0.3, 1] as const;
+
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const [headingShift, setHeadingShift] = useState(0);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const contentFade = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setHeadingShift((current) => (current + 1) % 3);
-    }, 1000);
-
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const headingPalette = ["solid-muted", "solid-white", "gradient-green"] as const;
-  const headingWords = [
-    { text: "Creative Multimedia", d: 0.16 },
-    { text: "Designer &", d: 0.28 },
-    { text: "Consultant", d: 0.40 },
-  ];
+  const reduceMotion = useReducedMotion();
 
   return (
     <section
-      ref={ref}
       id="home"
-      className="relative flex items-center w-full max-w-full overflow-hidden min-h-screen lg:min-h-[115vh]"
-      style={{ background: "#03030A" }}
+      className="relative min-h-screen overflow-hidden bg-[#03030B] text-white"
+      aria-labelledby="hero-heading"
     >
-      {/* ── noise grain ── */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
+      <div
+        className="absolute left-1/2 top-[46%] h-[470px] w-[470px] -translate-x-1/2 rounded-full blur-[125px]"
+        style={{ background: "rgba(20,168,0,0.34)" }}
+        aria-hidden="true"
+      />
+      <motion.div
+        className="absolute left-1/2 top-[50%] h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#14A800]/8"
+        animate={reduceMotion ? undefined : { scale: [1, 1.04, 1], opacity: [0.24, 0.42, 0.24] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 opacity-[0.11]"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          backgroundSize: "180px 180px",
+          backgroundImage: "radial-gradient(circle, rgba(20,168,0,0.42) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
         }}
+        aria-hidden="true"
       />
 
-      {/* ── dot grid, fades to edges ── */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(circle, rgba(20,168,0,0.18) 1px, transparent 1px)",
-          backgroundSize: "42px 42px",
-          maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 0%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 0%, transparent 100%)",
-        }}
-      />
-
-      {/* ── ambient glows ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-48 -right-48 w-[650px] h-[650px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(20,168,0,0.08) 0%, transparent 60%)" }} />
-        <div className="absolute -bottom-32 left-1/4 w-[550px] h-[400px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(0,198,255,0.05) 0%, transparent 65%)" }} />
-      </div>
-
-      {/* ── ghost text ── */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 select-none pointer-events-none hidden xl:block overflow-hidden"
-        style={{
-          fontSize: "23vw", fontWeight: 900, letterSpacing: "0", lineHeight: 1,
-          color: "transparent",
-          WebkitTextStroke: "1px rgba(20,168,0,0.05)",
-        }}
-      >
-        AWAIS
-      </div>
-
-      {/* ── page content ── */}
-      <motion.div style={{ y: contentY, opacity: contentFade }} className="relative z-10 w-full">
-        <div className="max-w-7xl mx-auto px-6 lg:px-14 pt-32 md:pt-36 lg:pt-40 pb-20 md:pb-24 lg:pb-28
-                        grid lg:grid-cols-[1fr_auto] gap-12 xl:gap-20 items-center overflow-hidden">
-
-          {/* ════════════════ LEFT TEXT ════════════════ */}
-          <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
-
-            {/* status pill */}
-            <motion.div
-              initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.08 }}
-              className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8 md:mb-10"
-            >
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border"
-                style={{ background: "rgba(20,168,0,0.07)", borderColor: "rgba(20,168,0,0.2)" }}>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#14A800] animate-pulse" />
-                <span className="text-[#14A800]" style={{ fontSize: "11px", fontWeight: 800, letterSpacing: "1.5px" }}>
-                  AVAILABLE FOR WORK
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-[#A9FF9D]" style={{ fontSize: "11px", fontWeight: 700 }}>
-                <MapPin size={10} />
-                ISLAMABAD, PK
-              </div>
-            </motion.div>
-
-            {/* stacked headline */}
-            <div className="overflow-hidden mb-6 md:mb-8">
-              {headingWords.map(({ text, d }, index) => {
-                const colorMode = headingPalette[(index + headingShift) % headingPalette.length];
-
-                return (
-                  <motion.div
-                    key={text}
-                  initial={{ y: 100, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.9, delay: d, ease: [0.16, 1, 0.3, 1] }}
-                  style={{
-                    fontSize: "var(--hero-heading-size)",
-                    fontWeight: 900,
-                    lineHeight: 0.97,
-                    letterSpacing: "0",
-                    transitionProperty: "color, background",
-                    transitionDuration: "120ms",
-                    ...(colorMode === "gradient-green" ? {
-                      background: "linear-gradient(110deg,#14A800 0%,#6FDA44 50%,#00C6FF 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    } : {
-                      background: "transparent",
-                      WebkitTextFillColor: colorMode === "solid-white" ? "#ffffff" : "#A9FF9D",
-                      color: colorMode === "solid-white" ? "#ffffff" : "#A9FF9D",
-                    }),
-                  }}
-                >
-                  {text}
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* description */}
-            <motion.p
-              initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.55 }}
-              className="text-white mb-8 md:mb-10 max-w-lg mx-auto lg:mx-0"
-              style={{ lineHeight: 1.9, fontSize: "1rem", fontWeight: 500 }}
-            >
-              I turn ambitious ideas into iconic visual identities — specializing in brand strategy,
-              UI/UX design, and systems that generate measurable results.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-              className="lg:hidden relative mx-auto mb-8 w-full max-w-[330px]"
-            >
-              <img
-                src={heroSectionImage}
-                alt="Awais Designer hero visual"
-                className="w-full h-auto object-contain"
-              />
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.65 }}
-              className="flex flex-wrap justify-center lg:justify-start gap-3 mb-10 md:mb-14"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
-                onClick={() => document.querySelector("#work")?.scrollIntoView({ behavior: "smooth" })}
-                className="group relative px-9 py-4 rounded-lg text-white flex items-center gap-2 overflow-hidden"
-                style={{ fontWeight: 800, fontSize: "0.92rem" }}
-              >
-                <div className="absolute inset-0 rounded-lg"
-                  style={{ background: "linear-gradient(135deg,#14A800,#097300)" }} />
-                <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: "linear-gradient(135deg,#1bd400,#0d8a00)" }} />
-                <div className="absolute inset-0 rounded-lg pointer-events-none"
-                  style={{ boxShadow: "0 10px 36px rgba(20,168,0,0.5)" }} />
-                <span className="relative">View Portfolio</span>
-                <ArrowUpRight size={15} className="relative" />
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
-                onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-                className="px-9 py-4 rounded-lg border text-white/50 hover:text-white transition-all duration-200"
-                style={{ fontWeight: 700, fontSize: "0.92rem", borderColor: "rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}
-              >
-                Hire Me
-              </motion.button>
-            </motion.div>
-
-            {/* stats */}
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.8 }}
-            >
-              <div className="w-20 h-px mb-7" style={{ background: "rgba(20,168,0,0.2)" }} />
-              <div className="grid grid-cols-2 gap-y-4 sm:flex sm:flex-wrap sm:justify-center lg:justify-start items-center">
-                {[
-                  { to: 200, suffix: "+", label: "Projects",    color: "#14A800" },
-                  { to: 98,  suffix: "%", label: "Satisfaction", color: "#00C6FF" },
-                  { to: 7,   suffix: "+", label: "Years Exp.",   color: "#A855F7" },
-                  { to: 50,  suffix: "+", label: "Clients",      color: "#F59E0B" },
-                ].map((s, i) => (
-                  <div key={s.label} className="flex items-center justify-center">
-                    <div className="flex flex-col items-center px-3 sm:px-5 first:pl-0 last:pr-0 text-center">
-                      <div style={{ color: s.color, fontWeight: 900, fontSize: "1.75rem", letterSpacing: "0", lineHeight: 1 }}>
-                        <Counter to={s.to} suffix={s.suffix} />
-                      </div>
-                      <div className="text-[#A9FF9D] mt-1" style={{ fontSize: "9.5px", fontWeight: 800, letterSpacing: "1px" }}>
-                        {s.label.toUpperCase()}
-                      </div>
-                    </div>
-                    {i < 3 && <div className="hidden sm:block w-px h-7" style={{ background: "rgba(255,255,255,0.04)" }} />}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* ════════════════ RIGHT VISUAL ════════════════ */}
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-68px)] w-full max-w-[1138px] grid-cols-1 px-6 pb-28 pt-28 sm:px-10 lg:grid-cols-[154px_minmax(0,1fr)_143px] lg:gap-[48px] lg:px-0 lg:pb-[68px] lg:pt-[116px]">
+        <motion.aside
+          initial={{ opacity: 0, x: -22 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.65, ease: easeOut }}
+          className="order-2 mt-12 flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-center lg:order-1 lg:mt-[72px] lg:flex-col lg:justify-start"
+        >
           <motion.div
-            initial={{ opacity: 0, scale: 0.82 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.1, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="relative hidden lg:flex items-center justify-center flex-shrink-0"
-            style={{ width: 700, maxWidth: "46vw" }}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.62, delay: 0.18, ease: easeOut }}
+            className="hidden lg:block"
           >
-            <img
-              src={heroSectionImage}
-              alt="Awais Designer hero visual"
-              className="w-full h-auto object-contain"
+            <div className="flex items-center">
+              <motion.img
+                src={heroPortrait}
+                alt=""
+                aria-hidden="true"
+                className="h-11 w-11 rounded-full object-cover"
+                style={{ objectPosition: "56% 22%" }}
+                animate={reduceMotion ? undefined : { y: [0, -4, 0] }}
+                transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.span
+                className="-ml-3 grid h-11 w-11 place-items-center rounded-full bg-white"
+                animate={reduceMotion ? undefined : { rotate: [0, 4, -4, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img src={logoMark} alt="" aria-hidden="true" className="h-8 w-8 object-contain" />
+              </motion.span>
+            </div>
+            <div className="mt-2 h-px w-[89px] bg-[#14A800]" />
+            <p className="mt-2 max-w-[140px] font-['Montserrat'] text-[14px] font-semibold leading-[1.2]">
+              Crafting Meaningful
+              <br />
+              Visual Experiences
+            </p>
+          </motion.div>
+
+          <div className="flex w-full flex-col gap-[27px] sm:max-w-[520px] sm:flex-row lg:mt-[86px] lg:max-w-[154px] lg:flex-col">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, x: -18 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.58, delay: 0.35 + index * 0.12, ease: easeOut }}
+                className="min-w-0 flex-1"
+              >
+                <p className="font-['Montserrat'] text-[38px] font-extrabold leading-none text-[#14A800] lg:text-[45px]">
+                  {stat.value}
+                </p>
+                <p className="mt-2 font-['Montserrat'] text-[13px] font-semibold leading-[1.2] text-white lg:text-[14px]">
+                  {stat.label}
+                </p>
+                {index < stats.length - 1 && (
+                  <motion.div
+                    className="mt-5 h-px w-full bg-[#14A800]"
+                    initial={{ scaleX: 0, transformOrigin: "left" }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.7, delay: 0.5 + index * 0.12, ease: easeOut }}
+                  />
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </motion.aside>
+
+        <div className="order-1 flex flex-col items-center justify-center lg:order-2">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, ease: easeOut }}
+            className="relative mt-4 flex min-h-[520px] w-full max-w-[745px] items-center justify-center sm:min-h-[640px] lg:mt-0 lg:min-h-[624px]"
+          >
+            <h1
+              id="hero-heading"
+              className="absolute left-1/2 top-[39%] z-10 -translate-x-1/2 -translate-y-1/2 select-none text-center uppercase leading-[0.78] tracking-[-0.02em]"
+              style={{ fontFamily: "'Supertalls', 'Arial Narrow', Impact, sans-serif", fontWeight: 400 }}
+            >
+              <motion.span
+                className="block text-[clamp(5.8rem,16vw,11.65rem)] text-[#14A800]"
+                initial={{ opacity: 0, y: 54, clipPath: "inset(0 0 100% 0)" }}
+                animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
+                transition={{ duration: 0.9, delay: 0.22, ease: easeOut }}
+              >
+                Creative
+              </motion.span>
+              <motion.span
+                className="block text-[clamp(5.2rem,14.6vw,10.7rem)] text-transparent"
+                style={{ WebkitTextStroke: "clamp(1px, 0.18vw, 2px) #ffffff" }}
+                initial={{ opacity: 0, y: 54, clipPath: "inset(100% 0 0 0)" }}
+                animate={{ opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }}
+                transition={{ duration: 0.9, delay: 0.34, ease: easeOut }}
+              >
+                Designer
+              </motion.span>
+            </h1>
+
+            <motion.img
+              src={heroPortrait}
+              alt="Awais Designer portrait"
+              initial={{ opacity: 0, y: 34, scale: 0.98 }}
+              animate={
+                reduceMotion
+                  ? { opacity: 1, y: 0, scale: 1 }
+                  : { opacity: 1, y: [0, -9, 0], scale: 1 }
+              }
+              transition={
+                reduceMotion
+                  ? { duration: 0.9, delay: 0.16, ease: easeOut }
+                  : {
+                      opacity: { duration: 0.9, delay: 0.16, ease: easeOut },
+                      scale: { duration: 0.9, delay: 0.16, ease: easeOut },
+                      y: { duration: 5.4, delay: 1.05, repeat: Infinity, ease: "easeInOut" },
+                    }
+              }
+              className="relative z-20 h-auto w-[min(88vw,650px)] object-contain drop-shadow-[0_30px_80px_rgba(20,168,0,0.2)] sm:w-[610px] lg:w-[650px]"
             />
           </motion.div>
         </div>
-      </motion.div>
 
-      {/* ── bottom hairline + scroll indicator ── */}
-      <div className="absolute bottom-0 left-0 right-0 z-20">
-        <div className="w-full h-px" style={{ background: "linear-gradient(90deg,transparent,rgba(20,168,0,0.3),transparent)" }} />
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 2.4 }}
-          className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 cursor-pointer"
-          onClick={() => document.querySelector("#work")?.scrollIntoView({ behavior: "smooth" })}
+        <motion.aside
+          initial={{ opacity: 0, x: 22 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.65, delay: 0.12, ease: easeOut }}
+          className="order-3 flex flex-col items-center gap-4 lg:mt-[177px] lg:items-start"
         >
-          <span className="text-[#141428]" style={{ fontSize: "9px", fontWeight: 900, letterSpacing: "3px" }}>SCROLL</span>
           <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity }}
-            className="w-5 h-8 rounded-full border flex items-start justify-center pt-1.5"
-            style={{ borderColor: "rgba(20,168,0,0.2)" }}
+            className="hidden h-16 w-16 place-items-center rounded-full border border-[#14A800] text-[#14A800] lg:grid lg:ml-[10px]"
+            animate={reduceMotion ? undefined : { rotate: 360, boxShadow: ["0 0 0 rgba(20,168,0,0)", "0 0 28px rgba(20,168,0,0.24)", "0 0 0 rgba(20,168,0,0)"] }}
+            transition={{ rotate: { duration: 14, repeat: Infinity, ease: "linear" }, boxShadow: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }}
           >
-            <div className="w-1 h-2 rounded-full" style={{ background: "#14A800" }} />
+            <Sparkles size={34} fill="currentColor" />
           </motion.div>
-        </motion.div>
+
+          <div className="mt-4 flex w-full max-w-[340px] flex-col gap-[17px] sm:flex-row lg:mt-[167px] lg:max-w-[143px] lg:flex-col">
+            <motion.a
+              href={cvFile}
+              download="Awais-Designer-CV.pdf"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.62, ease: easeOut }}
+              className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-[#14A800] px-5 font-['Montserrat'] text-[15px] font-bold text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:text-[16px]"
+            >
+              Download CV
+            </motion.a>
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.72, ease: easeOut }}
+              onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
+              className="inline-flex h-10 flex-1 items-center justify-center rounded-full border border-[#14A800] px-5 font-['Montserrat'] text-[15px] font-bold text-white transition-colors hover:bg-[#14A800]/16 lg:text-[16px]"
+            >
+              Hire Me
+            </motion.button>
+          </div>
+        </motion.aside>
       </div>
 
-      {/* ── corner bracket accents ── */}
-      <div className="absolute top-24 left-8 pointer-events-none hidden lg:block">
-        <div className="w-8 h-8 border-l border-t" style={{ borderColor: "rgba(20,168,0,0.15)" }} />
-      </div>
-      <div className="absolute bottom-24 right-8 pointer-events-none hidden lg:block">
-        <div className="w-8 h-8 border-r border-b" style={{ borderColor: "rgba(20,168,0,0.15)" }} />
-      </div>
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 z-30 overflow-hidden bg-[#14A800]"
+        initial={{ y: 68 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.72, delay: 0.82, ease: easeOut }}
+      >
+        <motion.div
+          initial={{ x: 0 }}
+          animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }}
+          transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+          className="flex h-[68px] w-max items-center gap-[35px] px-3"
+        >
+          {[...skills, ...skills].map((skill, index) => (
+            <div key={`${skill}-${index}`} className="flex shrink-0 items-center gap-[18px]">
+              <span
+                className="text-[24px] uppercase leading-none text-white sm:text-[27px]"
+                style={{ fontFamily: "'Supertalls', 'Arial Narrow', Impact, sans-serif", fontWeight: 400 }}
+              >
+                {skill}
+              </span>
+              <span className="h-[13px] w-[13px] rounded-full bg-[#03030B]" />
+            </div>
+          ))}
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
