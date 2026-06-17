@@ -51,7 +51,7 @@ export function FAQ() {
       className="py-24"
       style={{
         background:
-          "radial-gradient(circle at 15% 18%, rgba(20,168,0,0.12), transparent 26%), radial-gradient(circle at 85% 82%, rgba(0,198,255,0.08), transparent 22%), #03030B",
+          "radial-gradient(circle at 15% 18%, rgba(20,168,0,0.08), transparent 26%), radial-gradient(circle at 85% 82%, rgba(0,198,255,0.06), transparent 22%), transparent",
       }}
     >
       <div className="max-w-7xl mx-auto px-6">

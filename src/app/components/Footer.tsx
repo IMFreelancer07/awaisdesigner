@@ -12,7 +12,7 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer style={{ background: "#070710", borderTop: "1px solid rgba(20,168,0,0.1)" }}>
+    <footer style={{ background: "rgba(3,3,11,0.28)", borderTop: "1px solid rgba(20,168,0,0.1)" }}>
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}

@@ -70,7 +70,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen overflow-hidden bg-[#03030B] text-white"
+      className="relative min-h-screen overflow-hidden bg-transparent text-white"
       aria-labelledby="hero-heading"
     >
       <div

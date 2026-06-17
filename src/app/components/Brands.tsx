@@ -44,7 +44,7 @@ export function Brands() {
       className="relative py-20 overflow-hidden"
       style={{
         background:
-          "radial-gradient(circle at 18% 20%, rgba(20,168,0,0.11), transparent 26%), radial-gradient(circle at 78% 85%, rgba(0,198,255,0.08), transparent 28%), #05050C",
+          "radial-gradient(circle at 18% 20%, rgba(20,168,0,0.08), transparent 26%), radial-gradient(circle at 78% 85%, rgba(0,198,255,0.06), transparent 28%), transparent",
       }}
     >
       <div className="absolute inset-x-0 top-0 h-px" style={{ background: "linear-gradient(90deg,transparent,rgba(20,168,0,0.34),transparent)" }} />

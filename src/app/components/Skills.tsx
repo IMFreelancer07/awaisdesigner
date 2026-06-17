@@ -233,7 +233,7 @@ function ToolCard({ tool, index }: { tool: typeof tools[0]; index: number }) {
 /* ─── Main section ──────────────────────────────────── */
 export function Skills() {
   return (
-    <section id="skills" className="py-24" style={{ background: "#03030B" }}>
+    <section id="skills" className="py-24" style={{ background: "transparent" }}>
       <div className="max-w-7xl mx-auto px-6">
 
         {/* ── Header ── */}

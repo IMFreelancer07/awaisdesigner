@@ -42,7 +42,7 @@ const timeline = [
 
 export function About() {
   return (
-    <section id="about" className="py-24" style={{ background: "linear-gradient(180deg, #03030B 0%, #05050F 100%)" }}>
+    <section id="about" className="py-24" style={{ background: "transparent" }}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

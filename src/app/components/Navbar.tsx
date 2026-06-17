@@ -5,9 +5,10 @@ import logoMark from "../../imports/awais-logo-mark.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
   { label: "Portfolio", href: "#work" },
+  { label: "Services", href: "#services" },
   { label: "Skills", href: "#skills" },
+  { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -66,13 +67,20 @@ export function Navbar() {
       initial={{ y: -72, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.62, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed inset-x-0 top-0 z-[999] border-b transition-all duration-300 ${
+      className={`fixed inset-x-0 top-4 z-[999] px-4 transition-all duration-300 sm:top-6 ${
         scrolled
-          ? "border-white/8 bg-[#03030B]/92 shadow-[0_14px_42px_rgba(0,0,0,0.22)] backdrop-blur-md"
-          : "border-white/0 bg-[#03030B]/70 backdrop-blur-sm"
+          ? "translate-y-0"
+          : "translate-y-0"
       }`}
     >
-      <div className="mx-auto flex h-[92px] w-full max-w-[1138px] items-center justify-between px-8 sm:px-8 xl:px-0">
+      <div
+        className="mx-auto flex h-[72px] w-full max-w-[1244px] items-center justify-between rounded-full border px-6 shadow-[0_20px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:px-8 lg:px-[42px]"
+        style={{
+          background: "linear-gradient(90deg, rgba(3,48,12,0.8), rgba(6,66,13,0.62), rgba(3,48,12,0.8))",
+          borderColor: "rgba(20,168,0,0.42)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 18px 70px rgba(0,0,0,0.38), 0 0 46px rgba(20,168,0,0.22)",
+        }}
+      >
         <button
           type="button"
           onClick={() => handleNav("Home", "#home")}
@@ -85,14 +93,14 @@ export function Navbar() {
           </span>
         </button>
 
-        <nav className="hidden items-center gap-[55px] font-['Montserrat'] text-[16px] font-bold lg:flex" aria-label="Primary navigation">
+        <nav className="hidden items-center gap-[34px] font-['Montserrat'] text-[16px] font-bold xl:gap-[44px] lg:flex" aria-label="Primary navigation">
           {navLinks.map((link) => (
             <button
               key={link.label}
               type="button"
               onClick={() => handleNav(link.label, link.href)}
               className="relative text-white transition-colors hover:text-[#14A800]"
-              style={{ color: active === link.label ? "#14A800" : undefined }}
+              style={{ color: active === link.label ? "#14A800" : undefined, textShadow: active === link.label ? "0 0 18px rgba(20,168,0,0.42)" : undefined }}
             >
               {link.label}
             </button>
@@ -134,7 +142,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-t border-white/10 bg-[#03030B]/96 backdrop-blur-md lg:hidden"
+            className="mx-auto mt-3 max-w-[1244px] overflow-hidden rounded-3xl border border-[#14A800]/25 bg-[#03030B]/94 shadow-[0_18px_50px_rgba(0,0,0,0.32)] backdrop-blur-xl lg:hidden"
           >
             <div className="mx-auto flex max-w-[1245px] flex-col gap-2 px-5 py-5">
               {navLinks.map((link) => (

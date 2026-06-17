@@ -38,7 +38,7 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-24" style={{ background: "#03030B" }}>
+    <section className="py-24" style={{ background: "transparent" }}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

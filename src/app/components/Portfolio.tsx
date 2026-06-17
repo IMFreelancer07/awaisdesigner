@@ -371,7 +371,7 @@ export function Portfolio() {
     setSelected((prev) => (prev === id ? null : id));
 
   return (
-    <section id="work" style={{ background: "#03030B", position: "relative" }}>
+    <section id="work" style={{ background: "transparent", position: "relative" }}>
       <Marquee />
 
       <div className="py-24">
