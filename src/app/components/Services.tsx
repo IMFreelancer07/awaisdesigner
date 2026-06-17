@@ -61,7 +61,7 @@ const services = [
     description:
       "Animated logos, explainer videos, and motion assets that captivate in the first three seconds and keep viewers watching.",
     deliverables: ["Animated Logo (MP4/GIF)", "Explainer Video", "Social Motion Assets", "Source Files"],
-    color: "#6FDA44",
+    color: "#14A800",
   },
 ];
 
@@ -70,7 +70,7 @@ export function Services() {
   const current = services[active];
 
   return (
-    <section id="services" className="py-24" style={{ background: "#0B0B17" }}>
+    <section id="services" className="py-24" style={{ background: "#03030B" }}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
@@ -100,7 +100,7 @@ export function Services() {
               <br />
               <span
                 style={{
-                  background: "linear-gradient(90deg,#14A800,#6FDA44)",
+                  background: "linear-gradient(90deg,#14A800,#14A800)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
@@ -114,7 +114,7 @@ export function Services() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.15 }}
-            className="text-[#555575] max-w-xs md:text-right"
+            className="text-[#d7e0ff] max-w-xs md:text-right"
             style={{ lineHeight: 1.75, fontSize: "0.9rem" }}
           >
             Every service is backed by strategy, executed with precision, and delivered ready to use.
@@ -150,7 +150,7 @@ export function Services() {
                       border: `1px solid ${isActive ? s.color + "40" : "rgba(255,255,255,0.07)"}`,
                     }}
                   >
-                    <Icon size={18} color={isActive ? s.color : "#555575"} />
+                    <Icon size={18} color={isActive ? s.color : "#d7e0ff"} />
                   </div>
 
                   <div className="flex-1 min-w-0">

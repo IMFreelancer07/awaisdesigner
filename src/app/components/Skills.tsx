@@ -233,7 +233,7 @@ function ToolCard({ tool, index }: { tool: typeof tools[0]; index: number }) {
 /* ─── Main section ──────────────────────────────────── */
 export function Skills() {
   return (
-    <section id="skills" className="py-24" style={{ background: "#07070F" }}>
+    <section id="skills" className="py-24" style={{ background: "#03030B" }}>
       <div className="max-w-7xl mx-auto px-6">
 
         {/* ── Header ── */}
@@ -252,12 +252,12 @@ export function Skills() {
             </div>
             <h2 className="text-white" style={{ fontSize: "var(--section-heading-size)", fontWeight: 900, lineHeight: 0.95, letterSpacing: "0" }}>
               Skills &{" "}
-              <span style={{ background: "linear-gradient(90deg,#14A800,#6FDA44)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              <span style={{ background: "linear-gradient(90deg,#14A800,#14A800)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 Toolkit
               </span>
             </h2>
           </div>
-          <p className="text-[#444466] max-w-xs md:text-right" style={{ lineHeight: 1.75, fontSize: "0.88rem", fontWeight: 500 }}>
+          <p className="text-[#b8c6ff] max-w-xs md:text-right" style={{ lineHeight: 1.75, fontSize: "0.88rem", fontWeight: 500 }}>
             7+ years mastering every tool in the creative stack — from concept sketches to final export.
           </p>
         </motion.div>
@@ -341,7 +341,7 @@ export function Skills() {
                   <span className="text-[#14A800]" style={{ fontWeight: 900, fontSize: "12px" }}>{p.step}</span>
                 </div>
                 <div className="text-white mb-1" style={{ fontWeight: 800, fontSize: "0.88rem" }}>{p.title}</div>
-                <div className="text-[#444466]" style={{ fontSize: "0.76rem", lineHeight: 1.65, fontWeight: 500 }}>{p.desc}</div>
+                <div className="text-[#b8c6ff]" style={{ fontSize: "0.76rem", lineHeight: 1.65, fontWeight: 500 }}>{p.desc}</div>
               </motion.div>
             ))}
           </div>

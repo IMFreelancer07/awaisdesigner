@@ -118,7 +118,7 @@ function Marquee() {
               }}
             />
             <span
-              style={{ color: "#33334f", fontWeight: 800, fontSize: "11px", letterSpacing: "2.5px" }}
+              style={{ color: "#ffffff", fontWeight: 800, fontSize: "11px", letterSpacing: "2.5px" }}
             >
               {w.toUpperCase()}
             </span>
@@ -312,7 +312,7 @@ function DetailPanel({ project, onClose }: { project: typeof projects[0]; onClos
         >
           {project.title}
         </h3>
-        <div className="text-[#555575] text-sm mb-5" style={{ fontWeight: 600 }}>
+        <div className="text-[#d7e0ff] text-sm mb-5" style={{ fontWeight: 600 }}>
           {project.client}
         </div>
 
@@ -324,7 +324,7 @@ function DetailPanel({ project, onClose }: { project: typeof projects[0]; onClos
           <div className="w-1 h-8 rounded-full" style={{ background: project.accent, boxShadow: `0 0 8px ${project.accent}` }} />
           <div>
             <div style={{ color: project.accent, fontWeight: 900, fontSize: "1.3rem", lineHeight: 1 }}>{project.stat}</div>
-            <div className="text-[#444466] text-xs" style={{ fontWeight: 600 }}>Key result</div>
+            <div className="text-[#b8c6ff] text-xs" style={{ fontWeight: 600 }}>Key result</div>
           </div>
         </div>
 
@@ -371,7 +371,7 @@ export function Portfolio() {
     setSelected((prev) => (prev === id ? null : id));
 
   return (
-    <section id="work" style={{ background: "#07070F", position: "relative" }}>
+    <section id="work" style={{ background: "#03030B", position: "relative" }}>
       <Marquee />
 
       <div className="py-24">
@@ -392,7 +392,7 @@ export function Portfolio() {
               <h2 className="text-white" style={{ fontSize: "var(--work-heading-size)", fontWeight: 900, lineHeight: 0.93, letterSpacing: "0" }}>
                 Work that
                 <br />
-                <span style={{ background: "linear-gradient(90deg,#14A800 20%,#6FDA44 80%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                <span style={{ background: "linear-gradient(90deg,#14A800 20%,#14A800 80%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   speaks louder.
                 </span>
               </h2>
@@ -405,7 +405,7 @@ export function Portfolio() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="flex flex-col gap-4 items-start md:items-end"
             >
-              <p className="text-[#444466] text-sm max-w-xs md:text-right" style={{ fontWeight: 500, lineHeight: 1.7 }}>
+              <p className="text-[#b8c6ff] text-sm max-w-xs md:text-right" style={{ fontWeight: 500, lineHeight: 1.7 }}>
                 Click any project to explore the case study. Hover to interact.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -417,7 +417,7 @@ export function Portfolio() {
                     className="px-4 py-1.5 rounded-full text-xs transition-all duration-200"
                     style={{
                       fontWeight: 800,
-                      color: filter === cat ? "white" : "#444466",
+                      color: filter === cat ? "white" : "#b8c6ff",
                       background: filter === cat ? "#14A800" : "rgba(255,255,255,0.04)",
                       border: `1px solid ${filter === cat ? "#14A800" : "rgba(255,255,255,0.06)"}`,
                       boxShadow: filter === cat ? "0 4px 18px rgba(20,168,0,0.4)" : "none",
@@ -479,7 +479,7 @@ export function Portfolio() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="h-64 flex items-center justify-center rounded-lg border border-dashed border-white/10 text-[#333355]"
+                    className="h-64 flex items-center justify-center rounded-lg border border-dashed border-white/10 text-[#14A800]"
                     style={{ fontWeight: 700 }}
                   >
                     No projects in this category yet.
@@ -534,8 +534,8 @@ export function Portfolio() {
                       □
                     </motion.div>
                     <div>
-                      <div className="text-[#333355] text-sm" style={{ fontWeight: 800 }}>Select a project</div>
-                      <div className="text-[#22223a]" style={{ fontSize: "12px", fontWeight: 600, marginTop: "4px" }}>
+                      <div className="text-[#14A800] text-sm" style={{ fontWeight: 800 }}>Select a project</div>
+                      <div className="text-[#d7e0ff]" style={{ fontSize: "12px", fontWeight: 600, marginTop: "4px" }}>
                         Click any card to see<br />the full case study
                       </div>
                     </div>
@@ -558,7 +558,7 @@ export function Portfolio() {
               <div className="text-white" style={{ fontWeight: 900, fontSize: "1.1rem" }}>
                 Got a project in mind?
               </div>
-              <div className="text-[#333355] text-sm mt-0.5" style={{ fontWeight: 600 }}>
+              <div className="text-[#14A800] text-sm mt-0.5" style={{ fontWeight: 600 }}>
                 I'm available for freelance work — let's build something great.
               </div>
             </div>
@@ -567,7 +567,7 @@ export function Portfolio() {
               whileTap={{ scale: 0.97 }}
               onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
               className="flex-shrink-0 px-7 py-3 rounded-lg text-white flex items-center gap-2 text-sm"
-              style={{ background: "linear-gradient(135deg,#14A800,#0d8a00)", fontWeight: 800, boxShadow: "0 6px 28px rgba(20,168,0,0.4)" }}
+              style={{ background: "linear-gradient(135deg,#14A800,#14A800)", fontWeight: 800, boxShadow: "0 6px 28px rgba(20,168,0,0.4)" }}
             >
               Start a Project <ArrowUpRight size={15} />
             </motion.button>

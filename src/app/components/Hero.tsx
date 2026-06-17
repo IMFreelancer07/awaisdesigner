@@ -93,12 +93,12 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-68px)] w-full max-w-[1138px] grid-cols-1 px-6 pb-28 pt-28 sm:px-10 lg:grid-cols-[154px_minmax(0,1fr)_143px] lg:gap-[48px] lg:px-0 lg:pb-[68px] lg:pt-[116px]">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-52px)] w-full max-w-[1138px] grid-cols-1 px-8 pb-[74px] pt-[86px] sm:px-10 lg:min-h-[calc(100vh-68px)] lg:grid-cols-[154px_minmax(0,1fr)_143px] lg:gap-[48px] lg:px-0 lg:pb-[68px] lg:pt-[116px]">
         <motion.aside
           initial={{ opacity: 0, x: -22 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.65, ease: easeOut }}
-          className="order-2 mt-12 flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-center lg:order-1 lg:mt-[72px] lg:flex-col lg:justify-start"
+          className="order-2 mt-12 hidden flex-col gap-8 sm:flex-row sm:items-start sm:justify-center lg:order-1 lg:mt-[72px] lg:flex lg:flex-col lg:justify-start"
         >
           <motion.div
             initial={{ opacity: 0, y: 14 }}
@@ -160,11 +160,20 @@ export function Hero() {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: easeOut }}
-            className="relative mt-4 flex min-h-[520px] w-full max-w-[745px] items-center justify-center sm:min-h-[640px] lg:mt-0 lg:min-h-[624px]"
+            className="relative mt-2 flex min-h-[555px] w-full max-w-[745px] items-start justify-center sm:min-h-[640px] lg:mt-0 lg:min-h-[624px] lg:items-center"
           >
             <h1 id="hero-heading" className="sr-only">
               Creative Designer
             </h1>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.56, delay: 0.36, ease: easeOut }}
+              className="absolute left-2 top-[118px] z-30 grid h-10 w-10 place-items-center rounded-full border-2 border-[#14A800] text-[#14A800] sm:left-2 sm:top-[128px] lg:hidden"
+            >
+              <Sparkles size={21} fill="currentColor" />
+            </motion.div>
 
             <motion.img
               src={heroCenterComposite}
@@ -184,8 +193,66 @@ export function Hero() {
                       y: { duration: 5.4, delay: 1.05, repeat: Infinity, ease: "easeInOut" },
                     }
               }
-              className="relative z-20 h-auto w-[min(92vw,640px)] object-contain sm:w-[600px] lg:w-[640px]"
+              className="relative z-20 mt-12 h-auto w-[min(90vw,370px)] max-w-none object-contain sm:mt-4 sm:w-[560px] lg:mt-0 lg:w-[640px]"
             />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.62, delay: 0.42, ease: easeOut }}
+            className="-mt-10 grid w-full max-w-[356px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-x-7 gap-y-5 lg:hidden"
+          >
+            <div className="flex min-w-0 flex-col gap-[22px]">
+              {stats.map((stat, index) => (
+                <div key={stat.label} className="min-w-0">
+                  <p className="font-['Montserrat'] text-[43px] font-extrabold leading-none text-[#14A800]">
+                    <CountUpStat value={stat.value} suffix={stat.suffix} />
+                  </p>
+                  <p className="mt-2 font-['Montserrat'] text-[15px] font-semibold leading-[1.12] text-white">
+                    {stat.label}
+                  </p>
+                  {index < stats.length - 1 && <div className="mt-[18px] h-px w-full bg-[#14A800]" />}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex min-w-0 flex-col items-start justify-start pt-[12px]">
+              <div className="flex items-center">
+                <img
+                  src={heroBadgeIcons}
+                  alt=""
+                  aria-hidden="true"
+                  className="relative z-20 h-[52px] w-[104px] object-contain"
+                />
+              </div>
+              <div className="mt-[19px] h-px w-full max-w-[128px] bg-[#14A800]" />
+              <p className="mt-3 max-w-[150px] font-['Montserrat'] text-[15px] font-semibold leading-[1.2] text-white">
+                Crafting Meaningful
+                <br />
+                Visual Experiences
+              </p>
+              <div className="mt-7 flex w-full flex-col gap-[16px]">
+                <motion.a
+                  href={cvFile}
+                  download="Awais-Designer-CV.pdf"
+                  whileHover={{ scale: 1.04, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex h-[46px] w-full min-w-[146px] items-center justify-center whitespace-nowrap rounded-full bg-[#14A800] px-5 font-['Montserrat'] text-[16px] font-bold leading-none text-white shadow-[0_7px_14px_rgba(20,168,0,0.34)]"
+                >
+                  Download CV
+                </motion.a>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.04, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
+                  className="inline-flex h-[42px] w-full min-w-[146px] items-center justify-center rounded-full border border-[#14A800] px-5 font-['Montserrat'] text-[16px] font-bold leading-none text-white"
+                >
+                  Hire Me
+                </motion.button>
+              </div>
+            </div>
           </motion.div>
         </div>
 
@@ -193,7 +260,7 @@ export function Hero() {
           initial={{ opacity: 0, x: 22 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.65, delay: 0.12, ease: easeOut }}
-          className="order-3 flex flex-col items-center gap-4 lg:mt-[124px] lg:items-center"
+          className="order-3 hidden flex-col items-center gap-4 lg:mt-[124px] lg:flex lg:items-center"
         >
           <motion.div
             className="hidden h-16 w-16 place-items-center rounded-full border border-[#14A800] text-[#14A800] lg:grid"
@@ -234,7 +301,7 @@ export function Hero() {
 
       <motion.div
         className="absolute bottom-0 left-0 right-0 z-30 overflow-hidden bg-[#14A800]"
-        initial={{ y: 68 }}
+        initial={{ y: 41 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.72, delay: 0.82, ease: easeOut }}
       >
@@ -242,17 +309,17 @@ export function Hero() {
           initial={{ x: 0 }}
           animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }}
           transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
-          className="flex h-[68px] w-max items-center gap-[35px] px-3"
+          className="flex h-[41px] w-max items-center gap-[20px] px-3 lg:h-[68px] lg:gap-[35px]"
         >
           {[...skills, ...skills].map((skill, index) => (
-            <div key={`${skill}-${index}`} className="flex shrink-0 items-center gap-[18px]">
+            <div key={`${skill}-${index}`} className="flex shrink-0 items-center gap-[14px] lg:gap-[18px]">
               <span
-                className="text-[24px] uppercase leading-none text-white sm:text-[27px]"
+                className="text-[18px] uppercase leading-none text-white sm:text-[24px] lg:text-[27px]"
                 style={marqueeWordStyle}
               >
                 {skill}
               </span>
-              <span className="h-[13px] w-[13px] rounded-full bg-[#03030B]" />
+              <span className="h-[7px] w-[7px] rounded-full bg-[#03030B] lg:h-[13px] lg:w-[13px]" />
             </div>
           ))}
         </motion.div>

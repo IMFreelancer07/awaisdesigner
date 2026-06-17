@@ -50,7 +50,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24" style={{ background: "linear-gradient(180deg, #0D0D1A 0%, #090914 100%)" }}>
+    <section id="contact" className="py-24" style={{ background: "linear-gradient(180deg, #03030B 0%, #05050F 100%)" }}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -65,7 +65,7 @@ export function Contact() {
           </span>
           <h2 className="text-white mb-4" style={{ fontSize: "var(--section-heading-size)", fontWeight: 900, lineHeight: 1.15 }}>
             Let's Build Something{" "}
-            <span style={{ background: "linear-gradient(90deg,#14A800,#6FDA44)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <span style={{ background: "linear-gradient(90deg,#14A800,#14A800)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               Amazing
             </span>
           </h2>
@@ -243,7 +243,7 @@ export function Contact() {
                   disabled={loading}
                   className="w-full py-3.5 rounded-lg text-white flex items-center justify-center gap-2 transition-all duration-200"
                   style={{
-                    background: loading ? "rgba(20,168,0,0.5)" : "linear-gradient(135deg, #14A800, #0d8a00)",
+                    background: loading ? "rgba(20,168,0,0.5)" : "linear-gradient(135deg, #14A800, #14A800)",
                     fontWeight: 700,
                     boxShadow: loading ? "none" : "0 8px 24px rgba(20,168,0,0.3)",
                   }}

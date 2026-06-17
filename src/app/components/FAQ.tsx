@@ -51,7 +51,7 @@ export function FAQ() {
       className="py-24"
       style={{
         background:
-          "radial-gradient(circle at 15% 18%, rgba(20,168,0,0.12), transparent 26%), radial-gradient(circle at 85% 82%, rgba(0,198,255,0.1), transparent 22%), #07070F",
+          "radial-gradient(circle at 15% 18%, rgba(20,168,0,0.12), transparent 26%), radial-gradient(circle at 85% 82%, rgba(0,198,255,0.08), transparent 22%), #03030B",
       }}
     >
       <div className="max-w-7xl mx-auto px-6">
@@ -81,7 +81,7 @@ export function FAQ() {
               <br />
               <span
                 style={{
-                  background: "linear-gradient(180deg,#35E000 0%,#14A800 100%)",
+                  background: "linear-gradient(180deg,#14A800 0%,#14A800 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
@@ -254,7 +254,7 @@ export function FAQ() {
                 className="px-7 py-4 rounded-2xl text-white whitespace-nowrap w-full md:w-auto"
                 style={{
                   fontWeight: 800,
-                  background: "linear-gradient(135deg,#1BD400,#119000)",
+                  background: "linear-gradient(135deg,#14A800,#119000)",
                   boxShadow: "0 14px 32px rgba(20,168,0,0.28)",
                 }}
               >

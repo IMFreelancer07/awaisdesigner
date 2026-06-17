@@ -38,7 +38,7 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-24" style={{ background: "#0D0D1A" }}>
+    <section className="py-24" style={{ background: "#03030B" }}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -53,7 +53,7 @@ export function Testimonials() {
           </span>
           <h2 className="text-white mb-4" style={{ fontSize: "var(--section-heading-size)", fontWeight: 900, lineHeight: 1.15 }}>
             Client{" "}
-            <span style={{ background: "linear-gradient(90deg,#14A800,#6FDA44)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <span style={{ background: "linear-gradient(90deg,#14A800,#14A800)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               Success Stories
             </span>
           </h2>

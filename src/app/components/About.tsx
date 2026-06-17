@@ -18,7 +18,7 @@ const timeline = [
 
 export function About() {
   return (
-    <section id="about" className="py-24" style={{ background: "linear-gradient(180deg, #0a1015 0%, #0D0D1A 100%)" }}>
+    <section id="about" className="py-24" style={{ background: "linear-gradient(180deg, #03030B 0%, #05050F 100%)" }}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -33,7 +33,7 @@ export function About() {
           </span>
           <h2 className="text-white mb-4" style={{ fontSize: "var(--section-heading-size)", fontWeight: 900, lineHeight: 1.15 }}>
             The Creative{" "}
-            <span style={{ background: "linear-gradient(90deg,#14A800,#6FDA44)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <span style={{ background: "linear-gradient(90deg,#14A800,#14A800)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               Behind the Work
             </span>
           </h2>
@@ -89,7 +89,7 @@ export function About() {
                 animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-16 h-16 sm:w-20 sm:h-20 rounded-lg flex flex-col items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #14A800, #0d8a00)", boxShadow: "0 8px 24px rgba(20,168,0,0.4)" }}
+                style={{ background: "linear-gradient(135deg, #14A800, #14A800)", boxShadow: "0 8px 24px rgba(20,168,0,0.4)" }}
               >
                 <span className="text-white" style={{ fontSize: "1.45rem", fontWeight: 900, lineHeight: 1 }}>7+</span>
                 <span className="text-white/80" style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "1px" }}>YEARS</span>
