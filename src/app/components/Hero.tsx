@@ -270,7 +270,7 @@ export function Hero() {
             <Sparkles size={34} fill="currentColor" />
           </motion.div>
 
-          <div className="mt-4 flex w-full max-w-[340px] flex-col gap-[14px] sm:flex-row lg:mt-[178px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
+          <div className="mt-4 flex w-full max-w-[340px] flex-col items-stretch gap-[14px] sm:flex-row lg:mt-[244px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
             <motion.a
               href={cvFile}
               download="Awais-Designer-CV.pdf"
