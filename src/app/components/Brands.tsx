@@ -95,14 +95,14 @@ export function Brands() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {currentBrands.map((brand, index) => (
             <motion.div
               key={`${brand.name}-${startIndex}`}
               initial={{ opacity: 0, y: 18, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.38, delay: index * 0.04 }}
-              className={`${index === 0 ? "flex" : index < 3 ? "hidden sm:flex" : "hidden lg:flex"} min-h-[168px] rounded-lg border items-center justify-center text-center px-5 group`}
+              className={`${index < 2 ? "flex" : index < 3 ? "hidden sm:flex" : "hidden lg:flex"} min-h-[148px] rounded-lg border items-center justify-center text-center px-4 group sm:min-h-[168px] sm:px-5`}
               style={{
                 background: "linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.02))",
                 borderColor: "rgba(255,255,255,0.08)",
@@ -114,7 +114,7 @@ export function Brands() {
                 <img
                   src={brand.logo}
                   alt={`${brand.name} logo`}
-                  className="w-full max-w-[150px] h-[112px] object-contain opacity-95 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105"
+                  className="w-full max-w-[122px] h-[96px] object-contain opacity-95 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105 sm:max-w-[150px] sm:h-[112px]"
                 />
               </div>
             </motion.div>

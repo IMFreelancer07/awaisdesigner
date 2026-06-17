@@ -93,7 +93,7 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-52px)] w-full max-w-[1138px] grid-cols-1 px-8 pb-[74px] pt-[86px] sm:px-10 lg:min-h-[calc(100vh-68px)] lg:grid-cols-[154px_minmax(0,1fr)_143px] lg:gap-[48px] lg:px-0 lg:pb-[68px] lg:pt-[116px]">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-52px)] w-full max-w-[1138px] grid-cols-1 px-8 pb-[74px] pt-[86px] sm:px-10 lg:min-h-[calc(100vh-68px)] lg:grid-cols-[154px_minmax(0,1fr)_143px] lg:gap-[48px] lg:px-0 lg:pb-[28px] lg:pt-[116px]">
         <motion.aside
           initial={{ opacity: 0, x: -22 }}
           animate={{ opacity: 1, x: 0 }}
@@ -160,7 +160,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: easeOut }}
-            className="relative mt-2 flex min-h-[555px] w-full max-w-[745px] items-start justify-center sm:min-h-[640px] lg:mt-0 lg:min-h-[624px] lg:items-center"
+            className="relative mt-2 flex min-h-[555px] w-full max-w-[745px] items-start justify-center sm:min-h-[640px] lg:mt-8 lg:min-h-[584px] lg:items-center"
           >
             <h1 id="hero-heading" className="sr-only">
               Creative Designer
@@ -270,7 +270,7 @@ export function Hero() {
             <Sparkles size={34} fill="currentColor" />
           </motion.div>
 
-          <div className="mt-4 flex w-full max-w-[340px] flex-col items-stretch gap-[14px] sm:flex-row lg:mt-[244px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
+          <div className="mt-4 flex w-full max-w-[340px] flex-col items-stretch gap-[14px] sm:flex-row lg:mt-[340px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
             <motion.a
               href={cvFile}
               download="Awais-Designer-CV.pdf"

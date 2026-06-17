@@ -70,17 +70,17 @@ export function About() {
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 px-4 sm:px-5 py-3 sm:py-4 rounded-lg scale-90 sm:scale-100 origin-bottom-right"
-                style={{ background: "#13132A", border: "1px solid rgba(20,168,0,0.3)", boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}
+                className="absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 rounded-lg px-5 py-4 text-center scale-90 sm:scale-100 origin-bottom-right"
+                style={{
+                  background: "linear-gradient(135deg, rgba(20,168,0,0.95), rgba(9,68,13,0.96))",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  boxShadow: "0 12px 40px rgba(0,0,0,0.4), 0 0 24px rgba(20,168,0,0.24)",
+                }}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-[#14A800] flex items-center justify-center">
-                    <Award size={18} color="white" />
-                  </div>
-                  <div>
-                    <div className="text-white text-sm" style={{ fontWeight: 800 }}>Top Rated</div>
-                    <div className="text-[#14A800]" style={{ fontSize: "11px", fontWeight: 600 }}>Premium service badge</div>
-                  </div>
+                <div className="text-white" style={{ fontSize: "13px", fontWeight: 900, letterSpacing: "1.4px", lineHeight: 1.15 }}>
+                  TOP RATED
+                  <br />
+                  DESIGNER
                 </div>
               </motion.div>
 

@@ -154,6 +154,17 @@
     max-width: 100%;
     overflow-x: hidden;
     background: #03030B;
+    cursor: url("../imports/arrow-cursor.png") 8 6, auto;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select,
+  label {
+    cursor: url("../imports/arrow-cursor.png") 8 6, pointer;
   }
 
   /**
