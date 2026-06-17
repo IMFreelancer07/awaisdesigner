@@ -307,8 +307,8 @@ export function Hero() {
       >
         <motion.div
           initial={{ x: 0 }}
-          animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }}
-          transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+          animate={reduceMotion ? undefined : { x: ["-50%", "0%"] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           className="flex h-[41px] w-max items-center gap-[20px] px-3 lg:h-[68px] lg:gap-[35px]"
         >
           {[...skills, ...skills].map((skill, index) => (
