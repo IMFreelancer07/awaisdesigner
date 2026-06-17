@@ -10,10 +10,34 @@ const highlights = [
 ];
 
 const timeline = [
-  { year: "2024", role: "Senior Creative Director", company: "Freelance / Remote", active: true },
-  { year: "2022", role: "Lead Brand Designer", company: "Digital Spark Agency", active: false },
-  { year: "2020", role: "UI/UX Designer", company: "TechVision Studio", active: false },
-  { year: "2018", role: "Junior Graphic Designer", company: "Creative Hub", active: false },
+  {
+    period: "Jul 2025 - Present",
+    marker: "25",
+    role: "Lead Designer & Full Stack Video Editor",
+    company: "ADWORLDPRIME | iStack Conference",
+    active: true,
+  },
+  {
+    period: "Mar 2022 - Jun 2025",
+    marker: "22",
+    role: "Senior Visual Designer",
+    company: "FUNADIQ Travel & Tourism",
+    active: false,
+  },
+  {
+    period: "Feb 2020 - Jan 2022",
+    marker: "20",
+    role: "Graphic Designer & Social Media Manager",
+    company: "Colorzone Printing Press, Abu Dhabi",
+    active: false,
+  },
+  {
+    period: "Oct 2018 - Jan 2020",
+    marker: "18",
+    role: "Graphic Designer & Video Editor",
+    company: "Digi Experts, Digital Marketing Agency",
+    active: false,
+  },
 ];
 
 export function About() {
@@ -163,7 +187,7 @@ export function About() {
             <div className="space-y-6">
               {timeline.map((item, i) => (
                 <motion.div
-                  key={item.year}
+                  key={item.period}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -175,12 +199,13 @@ export function About() {
                       style={{ background: item.active ? "rgba(20,168,0,0.08)" : "rgba(255,255,255,0.02)", borderColor: item.active ? "rgba(20,168,0,0.25)" : undefined }}>
                       <div className="text-white" style={{ fontWeight: 800, fontSize: "0.95rem" }}>{item.role}</div>
                       <div className="text-[#6868a0] text-sm" style={{ fontWeight: 500 }}>{item.company}</div>
+                      <div className="mt-1 text-[#14A800] text-xs" style={{ fontWeight: 700 }}>{item.period}</div>
                     </div>
                   </div>
                   <div className="flex-shrink-0 relative z-10 absolute left-0 md:static">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center"
                       style={{ background: item.active ? "#14A800" : "#1a1a2e", border: "2px solid", borderColor: item.active ? "#14A800" : "rgba(255,255,255,0.1)" }}>
-                      <span className="text-white" style={{ fontSize: "11px", fontWeight: 900 }}>{item.year.slice(2)}</span>
+                      <span className="text-white" style={{ fontSize: "11px", fontWeight: 900 }}>{item.marker}</span>
                     </div>
                   </div>
                   <div className="hidden md:block flex-1" />

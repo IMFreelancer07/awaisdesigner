@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, useReducedMotion } from "motion/react";
-import { Sparkles } from "lucide-react";
 import cvFile from "../../imports/awais-designer-cv.pdf";
 import heroBadgeIcons from "../../imports/hero-badge-icons.png";
 import heroCenterComposite from "../../imports/hero-center-composite.png";
+import verifiedBadge from "../../imports/verified-badge.png";
 
 const stats = [
   { value: 500, suffix: "+", label: "Satisfied Clients" },
@@ -166,14 +166,9 @@ export function Hero() {
               Creative Designer
             </h1>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.56, delay: 0.36, ease: easeOut }}
-              className="absolute left-2 top-[118px] z-30 grid h-10 w-10 place-items-center rounded-full border-2 border-[#14A800] text-[#14A800] sm:left-2 sm:top-[128px] lg:hidden"
-            >
-              <Sparkles size={21} fill="currentColor" />
-            </motion.div>
+            <div className="absolute left-2 top-[118px] z-30 grid h-10 w-10 place-items-center sm:left-2 sm:top-[128px] lg:hidden">
+              <img src={verifiedBadge} alt="" aria-hidden="true" className="h-10 w-10 object-contain" />
+            </div>
 
             <motion.img
               src={heroCenterComposite}
@@ -262,13 +257,9 @@ export function Hero() {
           transition={{ duration: 0.65, delay: 0.12, ease: easeOut }}
           className="order-3 hidden flex-col items-center gap-4 lg:mt-[124px] lg:flex lg:items-center"
         >
-          <motion.div
-            className="hidden h-16 w-16 place-items-center rounded-full border border-[#14A800] text-[#14A800] lg:grid"
-            animate={reduceMotion ? undefined : { rotate: 360, boxShadow: ["0 0 0 rgba(20,168,0,0)", "0 0 28px rgba(20,168,0,0.24)", "0 0 0 rgba(20,168,0,0)"] }}
-            transition={{ rotate: { duration: 14, repeat: Infinity, ease: "linear" }, boxShadow: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }}
-          >
-            <Sparkles size={34} fill="currentColor" />
-          </motion.div>
+          <div className="hidden h-16 w-16 place-items-center lg:grid">
+            <img src={verifiedBadge} alt="" aria-hidden="true" className="h-16 w-16 object-contain" />
+          </div>
 
           <div className="mt-4 flex w-full max-w-[340px] flex-col items-stretch gap-[14px] sm:flex-row lg:mt-[340px] lg:w-[146px] lg:max-w-[146px] lg:flex-col">
             <motion.a
