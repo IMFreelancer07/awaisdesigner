@@ -12,8 +12,8 @@ import { Footer } from "./components/Footer";
 
 export default function App() {
   return (
-    <div className="min-h-screen relative" style={{ background: "#0D0D1A", fontFamily: "'Inter', system-ui, sans-serif" }}>
-      <div className="relative" style={{ zIndex: 2 }}>
+    <div className="min-h-screen relative w-full max-w-full overflow-x-hidden" style={{ background: "#0D0D1A", fontFamily: "'Inter', system-ui, sans-serif" }}>
+      <div className="relative w-full max-w-full overflow-x-hidden" style={{ zIndex: 2 }}>
         <Navbar />
         <Hero />
         <Portfolio />

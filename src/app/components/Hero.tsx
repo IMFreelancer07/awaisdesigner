@@ -199,7 +199,7 @@ export function Hero() {
     <section
       ref={ref}
       id="home"
-      className="relative flex items-center overflow-hidden min-h-screen lg:min-h-[115vh]"
+      className="relative flex items-center w-full max-w-full overflow-hidden min-h-screen lg:min-h-[115vh]"
       style={{ background: "#03030A" }}
     >
       {/* ── noise grain ── */}
@@ -242,7 +242,7 @@ export function Hero() {
       {/* ── page content ── */}
       <motion.div style={{ y: contentY, opacity: contentFade }} className="relative z-10 w-full">
         <div className="max-w-7xl mx-auto px-6 lg:px-14 pt-32 md:pt-36 lg:pt-40 pb-20 md:pb-24 lg:pb-28
-                        grid lg:grid-cols-[1fr_auto] gap-12 xl:gap-20 items-center">
+                        grid lg:grid-cols-[1fr_auto] gap-12 xl:gap-20 items-center overflow-hidden">
 
           {/* ════════════════ LEFT TEXT ════════════════ */}
           <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
@@ -316,7 +316,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="lg:hidden relative mx-auto mb-8 w-full max-w-[360px]"
+              className="lg:hidden relative mx-auto mb-8 w-full max-w-[330px]"
             >
               <img
                 src={heroSectionImage}

@@ -42,15 +42,15 @@ export function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3 overflow-hidden">
         {/* Logo */}
         <a
           href="#home"
           onClick={() => handleNav("Home", "#home")}
-          className="flex items-center gap-2 cursor-pointer"
+          className="min-w-0 flex items-center gap-2 cursor-pointer"
         >
-          <img src={logoMark} alt="Awais Designer logo" className="w-9 h-9 object-contain" />
-          <span style={{ fontSize: "20px", fontWeight: 800, letterSpacing: "0" }}>
+          <img src={logoMark} alt="Awais Designer logo" className="w-8 h-8 sm:w-9 sm:h-9 object-contain flex-shrink-0" />
+          <span className="whitespace-nowrap text-[16px] sm:text-[20px]" style={{ fontWeight: 800, letterSpacing: "0" }}>
             <span className="text-white">AWAIS</span>
             <span className="text-[#14A800]"> DESIGNER</span>
           </span>
@@ -90,7 +90,7 @@ export function Navbar() {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="md:hidden text-white p-2"
+          className="md:hidden text-white p-2 flex-shrink-0"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
