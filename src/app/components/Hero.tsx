@@ -1,165 +1,435 @@
-import { motion } from "motion/react";
-import { ArrowUpRight, BadgeCheck, MapPin, Phone, Sparkles, Star } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform, animate } from "motion/react";
+import {
+  ArrowUpRight, MapPin,
+  PenTool, Ruler, MousePointer2, Pipette, Type, Crop,
+} from "lucide-react";
 import heroSectionImage from "../../imports/hero-section-image.png";
 
-const heroStats = [
-  { value: "500+", label: "Happy Clients" },
-  { value: "200+", label: "Projects Done" },
-  { value: "7+", label: "Years Experience" },
+/* ─── animated counter ────────────────────────────────────── */
+function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
+  const [val, setVal] = useState(0);
+  const nodeRef = useRef<HTMLSpanElement>(null);
+  const seen = useRef(false);
+  useEffect(() => {
+    const el = nodeRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !seen.current) {
+        seen.current = true;
+        const ctrl = animate(0, to, {
+          duration: 1.8,
+          ease: [0.16, 1, 0.3, 1],
+          onUpdate: (v) => setVal(Math.round(v)),
+        });
+        return () => ctrl.stop();
+      }
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [to]);
+  return <span ref={nodeRef}>{val}{suffix}</span>;
+}
+
+/* ─── spinning dashed ring ────────────────────────────────── */
+function SpinRing({ size, color, duration, reverse = false, dashed = false }: {
+  size: number; color: string; duration: number; reverse?: boolean; dashed?: boolean;
+}) {
+  return (
+    <motion.div
+      animate={{ rotate: reverse ? -360 : 360 }}
+      transition={{ duration, repeat: Infinity, ease: "linear" }}
+      className="absolute rounded-full pointer-events-none"
+      style={{
+        width: size, height: size,
+        top: "50%", left: "50%",
+        marginTop: -size / 2, marginLeft: -size / 2,
+        border: dashed ? `1px dashed ${color}` : `1px solid ${color}`,
+        ...(!dashed && { borderTopColor: "transparent", borderRightColor: "transparent" }),
+      }}
+    />
+  );
+}
+
+/* ─── tool icon ───────────────────────────────────────────── */
+/*
+  KEY FIX: Never put `transform` in style on a motion.div — Motion owns that
+  property and will overwrite it during animation. Instead:
+    • outer plain <div>  → handles the STATIC position (left/top)
+    • first motion.div   → handles the ENTRY animation (opacity, scale)
+    • inner motion.div   → handles the FLOAT loop (y, x)
+*/
+const FRAME_CENTER = 240; // half of 480px frame
+const ICON_SIZE    = 56;
+
+interface ToolDef {
+  Icon: React.ElementType;
+  label: string;
+  color: string;
+  cx: number; cy: number;        // offset from frame center, px
+  floatY: number[];
+  floatX?: number[];
+  duration: number;
+  entryDelay: number;
+  rotateIcon?: number;
+}
+
+function ToolIcon({ Icon, label, color, cx, cy, floatY, floatX = [0,0,0], duration, entryDelay, rotateIcon = 0 }: ToolDef) {
+  const left = FRAME_CENTER + cx - ICON_SIZE / 2;
+  const top  = FRAME_CENTER + cy - ICON_SIZE / 2;
+
+  return (
+    <div
+      className="absolute pointer-events-none"
+      style={{ left, top, width: ICON_SIZE, height: ICON_SIZE, zIndex: 10 }}
+    >
+      {/* entry pop */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.2 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: entryDelay, duration: 0.65, ease: [0.34, 1.56, 0.64, 1] }}
+        className="w-full h-full"
+      >
+        {/* float loop */}
+        <motion.div
+          animate={{ y: floatY, x: floatX }}
+          transition={{ duration, repeat: Infinity, ease: "easeInOut", delay: entryDelay }}
+          className="relative w-full h-full rounded-lg flex items-center justify-center"
+          style={{
+            background: "rgba(4,4,16,0.9)",
+            backdropFilter: "blur(18px)",
+            border: `1px solid ${color}45`,
+            boxShadow: `0 6px 24px rgba(0,0,0,0.55), 0 0 0 1px ${color}12, inset 0 1px 0 rgba(255,255,255,0.05)`,
+          }}
+        >
+          {/* top glow */}
+          <div className="absolute inset-0 rounded-lg"
+            style={{ background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${color}28, transparent 70%)` }} />
+          <Icon
+            size={23}
+            color={color}
+            strokeWidth={1.5}
+            style={{ transform: `rotate(${rotateIcon}deg)`, position: "relative", zIndex: 1, flexShrink: 0 }}
+          />
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─── tool positions ──────────────────────────────────────── */
+/*
+  Frame: 480 × 480 px, center at (240, 240).
+  Portrait circle radius: 155 px  → edge at 155 px from center
+  Ring radii: 184, 212, 240 px
+  Tools placed at radius ≈ 198 px → in the gap between ring-2 (212) and ring-1 (184)
+  This keeps them clearly OUTSIDE the portrait but INSIDE the outer ring.
+
+  Clock positions: 12, 2, 4, 6, 9, 11 o'clock
+  cx = r·sin(θ),  cy = -r·cos(θ)   (y axis points down)
+*/
+const R = 198;
+const tools: ToolDef[] = [
+  {
+    Icon: PenTool,
+    label: "PEN",       color: "#14A800",
+    cx: 0,              cy: -R,           // 12 o'clock
+    floatY: [0,-10,0],  duration: 3.2,    entryDelay: 1.1,
+  },
+  {
+    Icon: Ruler,
+    label: "RULER",     color: "#00C6FF",
+    cx: Math.round(R * Math.sin((2/6)*Math.PI)),
+    cy: Math.round(-R * Math.cos((2/6)*Math.PI)),  // ~2 o'clock
+    floatY: [0,-8,0],   floatX: [0,5,0],  duration: 3.8, entryDelay: 1.25,
+    rotateIcon: -40,
+  },
+  {
+    Icon: MousePointer2,
+    label: "SELECT",    color: "#A855F7",
+    cx: Math.round(R * Math.sin((4/6)*Math.PI)),
+    cy: Math.round(-R * Math.cos((4/6)*Math.PI)),  // ~4 o'clock
+    floatY: [0,9,0],    floatX: [0,5,0],  duration: 4.2, entryDelay: 1.4,
+  },
+  {
+    Icon: Pipette,
+    label: "PICKER",    color: "#F59E0B",
+    cx: 0,              cy: R,            // 6 o'clock
+    floatY: [0,10,0],   duration: 3.6,    entryDelay: 1.55,
+  },
+  {
+    Icon: Type,
+    label: "TYPE",      color: "#FF6B35",
+    cx: -R,             cy: 0,            // 9 o'clock
+    floatY: [0,7,0],    floatX: [0,-6,0], duration: 4.0, entryDelay: 1.7,
+  },
+  {
+    Icon: Crop,
+    label: "CROP",      color: "#6FDA44",
+    cx: Math.round(-R * Math.sin((2/6)*Math.PI)),
+    cy: Math.round(-R * Math.cos((2/6)*Math.PI)),  // ~10 o'clock
+    floatY: [0,-9,0],   floatX: [0,-5,0], duration: 3.4, entryDelay: 1.85,
+  },
 ];
 
+/* ─── Hero ────────────────────────────────────────────────── */
 export function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const [headingShift, setHeadingShift] = useState(0);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const contentFade = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setHeadingShift((current) => (current + 1) % 3);
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const headingPalette = ["solid-muted", "solid-white", "gradient-green"] as const;
+  const headingWords = [
+    { text: "Creative Multimedia", d: 0.16 },
+    { text: "Designer &", d: 0.28 },
+    { text: "Consultant", d: 0.40 },
+  ];
+
   return (
     <section
+      ref={ref}
       id="home"
-      className="relative min-h-screen w-full max-w-full overflow-hidden pt-24 sm:pt-28 text-white"
-      style={{
-        background:
-          "radial-gradient(circle at 72% 42%, rgba(196,255,0,0.2), transparent 18%), linear-gradient(135deg,#1235ff 0%,#071fca 45%,#06127a 100%)",
-      }}
+      className="relative flex items-center w-full max-w-full overflow-hidden min-h-screen lg:min-h-[115vh]"
+      style={{ background: "#03030A" }}
     >
-      <div
-        className="absolute inset-0 opacity-[0.18]"
+      {/* ── noise grain ── */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)",
-          backgroundSize: "54px 54px",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundSize: "180px 180px",
         }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,transparent_0,rgba(3,5,40,0.18)_55%,rgba(0,0,0,0.35)_100%)]" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[calc(100vh-7rem)] grid lg:grid-cols-[150px_1fr_340px] gap-8 items-end pb-10 overflow-x-hidden lg:overflow-visible">
-        <motion.aside
-          initial={{ opacity: 0, x: -24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-          className="hidden lg:flex flex-col gap-8 self-center"
-        >
-          <div className="flex -space-x-3">
-            {["A", "D", "UX"].map((item) => (
-              <div
-                key={item}
-                className="h-12 w-12 rounded-full border-2 border-[#1235ff] bg-white text-[#1235ff] grid place-items-center"
-                style={{ fontWeight: 900, fontSize: item.length > 1 ? "0.72rem" : "1rem" }}
-              >
-                {item}
+      {/* ── dot grid, fades to edges ── */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(20,168,0,0.18) 1px, transparent 1px)",
+          backgroundSize: "42px 42px",
+          maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 0%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 0%, transparent 100%)",
+        }}
+      />
+
+      {/* ── ambient glows ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-48 -right-48 w-[650px] h-[650px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(20,168,0,0.08) 0%, transparent 60%)" }} />
+        <div className="absolute -bottom-32 left-1/4 w-[550px] h-[400px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(0,198,255,0.05) 0%, transparent 65%)" }} />
+      </div>
+
+      {/* ── ghost text ── */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 select-none pointer-events-none hidden xl:block overflow-hidden"
+        style={{
+          fontSize: "23vw", fontWeight: 900, letterSpacing: "0", lineHeight: 1,
+          color: "transparent",
+          WebkitTextStroke: "1px rgba(20,168,0,0.05)",
+        }}
+      >
+        AWAIS
+      </div>
+
+      {/* ── page content ── */}
+      <motion.div style={{ y: contentY, opacity: contentFade }} className="relative z-10 w-full">
+        <div className="max-w-7xl mx-auto px-6 lg:px-14 pt-32 md:pt-36 lg:pt-40 pb-20 md:pb-24 lg:pb-28
+                        grid lg:grid-cols-[1fr_auto] gap-12 xl:gap-20 items-center overflow-hidden">
+
+          {/* ════════════════ LEFT TEXT ════════════════ */}
+          <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
+
+            {/* status pill */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.08 }}
+              className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8 md:mb-10"
+            >
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border"
+                style={{ background: "rgba(20,168,0,0.07)", borderColor: "rgba(20,168,0,0.2)" }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#14A800] animate-pulse" />
+                <span className="text-[#14A800]" style={{ fontSize: "11px", fontWeight: 800, letterSpacing: "1.5px" }}>
+                  AVAILABLE FOR WORK
+                </span>
               </div>
-            ))}
-          </div>
-          <div className="h-px w-full bg-[#c7ff00]" />
-          <p className="max-w-[132px] uppercase text-sm leading-tight" style={{ fontWeight: 900 }}>
-            Strategy, design and visual systems for ambitious brands.
-          </p>
-          <div className="space-y-7">
-            {heroStats.map((stat) => (
-              <div key={stat.label}>
-                <div className="text-5xl text-[#c7ff00]" style={{ fontWeight: 1000, lineHeight: 0.9 }}>
-                  {stat.value}
-                </div>
-                <div className="mt-2 h-px w-full bg-[#c7ff00]" />
-                <div className="mt-2 uppercase text-xs" style={{ fontWeight: 900 }}>
-                  {stat.label}
-                </div>
+              <div className="flex items-center gap-1 text-[#A9FF9D]" style={{ fontSize: "11px", fontWeight: 700 }}>
+                <MapPin size={10} />
+                ISLAMABAD, PK
               </div>
-            ))}
-          </div>
-        </motion.aside>
+            </motion.div>
 
-        <div className="relative min-h-[auto] lg:min-h-[700px] flex flex-col justify-end">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.08 }}
-            className="mb-8 flex flex-wrap items-center gap-3"
-          >
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#c7ff00]/60 bg-[#c7ff00]/10 px-4 py-2 text-[#c7ff00] uppercase text-xs" style={{ fontWeight: 900 }}>
-              <BadgeCheck size={15} /> Available for work
-            </span>
-            <span className="inline-flex items-center gap-2 uppercase text-xs text-white" style={{ fontWeight: 800 }}>
-              <MapPin size={14} /> Islamabad, PK
-            </span>
-          </motion.div>
+            {/* stacked headline */}
+            <div className="overflow-hidden mb-6 md:mb-8">
+              {headingWords.map(({ text, d }, index) => {
+                const colorMode = headingPalette[(index + headingShift) % headingPalette.length];
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
-          >
-            <h1 className="relative z-20 uppercase" style={{ fontWeight: 1000, lineHeight: 0.78, letterSpacing: "0" }}>
-              <span className="block text-[#c7ff00] text-[clamp(3.35rem,17vw,4.8rem)] sm:text-[clamp(4.8rem,13vw,12.5rem)]">Creative</span>
-              <span
-                className="block text-transparent text-[clamp(3.05rem,15vw,4.25rem)] sm:text-[clamp(4rem,11.5vw,11rem)]"
-                style={{ WebkitTextStroke: "2px #c7ff00" }}
-              >
-                Designer
-              </span>
-              <span className="block text-[#c7ff00] text-[clamp(3.2rem,16vw,4.4rem)] sm:text-[clamp(4.2rem,11.5vw,11rem)]">Awais</span>
-            </h1>
+                return (
+                  <motion.div
+                    key={text}
+                  initial={{ y: 100, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.9, delay: d, ease: [0.16, 1, 0.3, 1] }}
+                  style={{
+                    fontSize: "var(--hero-heading-size)",
+                    fontWeight: 900,
+                    lineHeight: 0.97,
+                    letterSpacing: "0",
+                    transitionProperty: "color, background",
+                    transitionDuration: "120ms",
+                    ...(colorMode === "gradient-green" ? {
+                      background: "linear-gradient(110deg,#14A800 0%,#6FDA44 50%,#00C6FF 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    } : {
+                      background: "transparent",
+                      WebkitTextFillColor: colorMode === "solid-white" ? "#ffffff" : "#A9FF9D",
+                      color: colorMode === "solid-white" ? "#ffffff" : "#A9FF9D",
+                    }),
+                  }}
+                >
+                  {text}
+                  </motion.div>
+                );
+              })}
+            </div>
 
-            <motion.img
-              src={heroSectionImage}
-              alt="Awais Designer"
-              initial={{ opacity: 0, x: 70 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10 mt-8 mx-auto w-full max-w-[360px] object-contain lg:absolute lg:right-0 lg:bottom-[-16px] lg:mt-0 lg:w-[min(50vw,640px)] lg:max-w-none"
-            />
-          </motion.div>
+            {/* description */}
+            <motion.p
+              initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.55 }}
+              className="text-white mb-8 md:mb-10 max-w-lg mx-auto lg:mx-0"
+              style={{ lineHeight: 1.9, fontSize: "1rem", fontWeight: 500 }}
+            >
+              I turn ambitious ideas into iconic visual identities — specializing in brand strategy,
+              UI/UX design, and systems that generate measurable results.
+            </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
-            className="relative z-30 mt-8 max-w-2xl rounded-lg border border-white/20 bg-[#06127a]/40 p-5 backdrop-blur-md"
-          >
-            <p className="text-lg text-white/90 leading-relaxed">
-              I create brand identities, UI/UX screens, company profiles and campaign visuals that look premium, stay consistent and help your business get noticed.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <button
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="lg:hidden relative mx-auto mb-8 w-full max-w-[330px]"
+            >
+              <img
+                src={heroSectionImage}
+                alt="Awais Designer hero visual"
+                className="w-full h-auto object-contain"
+              />
+            </motion.div>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.65 }}
+              className="flex flex-wrap justify-center lg:justify-start gap-3 mb-10 md:mb-14"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
                 onClick={() => document.querySelector("#work")?.scrollIntoView({ behavior: "smooth" })}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#c7ff00] px-6 py-3 text-[#06127a] uppercase"
-                style={{ fontWeight: 1000 }}
+                className="group relative px-9 py-4 rounded-lg text-white flex items-center gap-2 overflow-hidden"
+                style={{ fontWeight: 800, fontSize: "0.92rem" }}
               >
-                View Portfolio <ArrowUpRight size={18} />
-              </button>
-              <button
+                <div className="absolute inset-0 rounded-lg"
+                  style={{ background: "linear-gradient(135deg,#14A800,#097300)" }} />
+                <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: "linear-gradient(135deg,#1bd400,#0d8a00)" }} />
+                <div className="absolute inset-0 rounded-lg pointer-events-none"
+                  style={{ boxShadow: "0 10px 36px rgba(20,168,0,0.5)" }} />
+                <span className="relative">View Portfolio</span>
+                <ArrowUpRight size={15} className="relative" />
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
                 onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-                className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-6 py-3 text-white uppercase"
-                style={{ fontWeight: 900 }}
+                className="px-9 py-4 rounded-lg border text-white/50 hover:text-white transition-all duration-200"
+                style={{ fontWeight: 700, fontSize: "0.92rem", borderColor: "rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}
               >
                 Hire Me
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
+
+            {/* stats */}
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.8 }}
+            >
+              <div className="w-20 h-px mb-7" style={{ background: "rgba(20,168,0,0.2)" }} />
+              <div className="grid grid-cols-2 gap-y-4 sm:flex sm:flex-wrap sm:justify-center lg:justify-start items-center">
+                {[
+                  { to: 200, suffix: "+", label: "Projects",    color: "#14A800" },
+                  { to: 98,  suffix: "%", label: "Satisfaction", color: "#00C6FF" },
+                  { to: 7,   suffix: "+", label: "Years Exp.",   color: "#A855F7" },
+                  { to: 50,  suffix: "+", label: "Clients",      color: "#F59E0B" },
+                ].map((s, i) => (
+                  <div key={s.label} className="flex items-center justify-center">
+                    <div className="flex flex-col items-center px-3 sm:px-5 first:pl-0 last:pr-0 text-center">
+                      <div style={{ color: s.color, fontWeight: 900, fontSize: "1.75rem", letterSpacing: "0", lineHeight: 1 }}>
+                        <Counter to={s.to} suffix={s.suffix} />
+                      </div>
+                      <div className="text-[#A9FF9D] mt-1" style={{ fontSize: "9.5px", fontWeight: 800, letterSpacing: "1px" }}>
+                        {s.label.toUpperCase()}
+                      </div>
+                    </div>
+                    {i < 3 && <div className="hidden sm:block w-px h-7" style={{ background: "rgba(255,255,255,0.04)" }} />}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* ════════════════ RIGHT VISUAL ════════════════ */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.82 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="relative hidden lg:flex items-center justify-center flex-shrink-0"
+            style={{ width: 700, maxWidth: "46vw" }}
+          >
+            <img
+              src={heroSectionImage}
+              alt="Awais Designer hero visual"
+              className="w-full h-auto object-contain"
+            />
           </motion.div>
         </div>
+      </motion.div>
 
-        <motion.aside
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative hidden lg:flex flex-col justify-between self-stretch py-12"
+      {/* ── bottom hairline + scroll indicator ── */}
+      <div className="absolute bottom-0 left-0 right-0 z-20">
+        <div className="w-full h-px" style={{ background: "linear-gradient(90deg,transparent,rgba(20,168,0,0.3),transparent)" }} />
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ delay: 2.4 }}
+          className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 cursor-pointer"
+          onClick={() => document.querySelector("#work")?.scrollIntoView({ behavior: "smooth" })}
         >
-          <div className="ml-auto flex items-center gap-4">
-            <span className="grid h-16 w-16 place-items-center rounded-full bg-[#c7ff00] text-[#06127a]">
-              <Phone size={28} fill="currentColor" />
-            </span>
-            <div>
-              <div className="uppercase text-sm text-white/75" style={{ fontWeight: 900 }}>Book a project</div>
-              <a href="tel:+923335227117" className="text-xl text-white" style={{ fontWeight: 1000 }}>
-                +92 333 522 7117
-              </a>
-            </div>
-          </div>
-          <div className="ml-auto grid h-32 w-32 place-items-center rounded-full border-2 border-[#c7ff00] text-[#c7ff00]">
-            <Sparkles size={68} />
-          </div>
-          <div className="max-w-[260px] text-right text-white/85 leading-relaxed">
-            <Star className="ml-auto mb-3 text-[#c7ff00]" fill="currentColor" />
-            Premium creative direction for logo design, social media, print, website UI and brand presentations.
-          </div>
-        </motion.aside>
+          <span className="text-[#141428]" style={{ fontSize: "9px", fontWeight: 900, letterSpacing: "3px" }}>SCROLL</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity }}
+            className="w-5 h-8 rounded-full border flex items-start justify-center pt-1.5"
+            style={{ borderColor: "rgba(20,168,0,0.2)" }}
+          >
+            <div className="w-1 h-2 rounded-full" style={{ background: "#14A800" }} />
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* ── corner bracket accents ── */}
+      <div className="absolute top-24 left-8 pointer-events-none hidden lg:block">
+        <div className="w-8 h-8 border-l border-t" style={{ borderColor: "rgba(20,168,0,0.15)" }} />
+      </div>
+      <div className="absolute bottom-24 right-8 pointer-events-none hidden lg:block">
+        <div className="w-8 h-8 border-r border-b" style={{ borderColor: "rgba(20,168,0,0.15)" }} />
       </div>
     </section>
   );
