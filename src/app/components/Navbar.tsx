@@ -64,18 +64,23 @@ export function Navbar() {
           ))}
         </nav>
 
-        <motion.button
-          type="button"
+        <motion.a
+          href="https://www.behance.net/MAwaissiddiq"
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => handleNav("Portfolio", "#work")}
           className="hidden h-[42px] items-center gap-[9px] rounded-full bg-[#14A800] pl-[18px] pr-[6px] font-['Montserrat'] text-[14px] font-bold leading-none text-white transition-shadow hover:shadow-[0_0_24px_rgba(20,168,0,0.38)] lg:inline-flex"
         >
           Portfolio
-          <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-white text-[#14A800]">
+          <motion.span
+            className="grid h-[30px] w-[30px] place-items-center rounded-full bg-white text-[#14A800]"
+            animate={{ x: [0, 4, -2, 0] }}
+            transition={{ duration: 1.15, repeat: Infinity, repeatDelay: 0.45, ease: "easeInOut" }}
+          >
             <ArrowRight size={16} />
-          </span>
-        </motion.button>
+          </motion.span>
+        </motion.a>
 
         <button
           type="button"

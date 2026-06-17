@@ -1,13 +1,14 @@
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, useReducedMotion } from "motion/react";
 import { Sparkles } from "lucide-react";
 import cvFile from "../../imports/awais-designer-cv.pdf";
 import heroBadgeIcons from "../../imports/hero-badge-icons.png";
 import heroCenterComposite from "../../imports/hero-center-composite.png";
 
 const stats = [
-  { value: "500+", label: "Satisfied Clients" },
-  { value: "250+", label: "Projects Done" },
-  { value: "2000+", label: "Media Featured" },
+  { value: 500, suffix: "+", label: "Satisfied Clients" },
+  { value: 250, suffix: "+", label: "Projects Done" },
+  { value: 2000, suffix: "+", label: "Media Featured" },
 ];
 
 const skills = [
@@ -25,6 +26,43 @@ const marqueeWordStyle = {
 } as const;
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
+
+function CountUpStat({ value, suffix }: { value: number; suffix: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || hasAnimated.current) return;
+        hasAnimated.current = true;
+
+        const controls = animate(0, value, {
+          duration: 1.8,
+          ease: [0.16, 1, 0.3, 1],
+          onUpdate: (latest) => setCount(Math.round(latest)),
+        });
+
+        return () => controls.stop();
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [value]);
+
+  return (
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
+  );
+}
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
@@ -99,7 +137,7 @@ export function Hero() {
                 className="min-w-0 flex-1"
               >
                 <p className="font-['Montserrat'] text-[38px] font-extrabold leading-none text-[#14A800] lg:text-[45px]">
-                  {stat.value}
+                  <CountUpStat value={stat.value} suffix={stat.suffix} />
                 </p>
                 <p className="mt-2 font-['Montserrat'] text-[13px] font-semibold leading-[1.2] text-white lg:text-[14px]">
                   {stat.label}
