@@ -1,0 +1,28 @@
+# ─────────────────────────────────────────────────────────────
+#  Caddy site snippet for Awais Portfolio.
+#
+#  This is imported by the central Caddy's main Caddyfile
+#  (`import /etc/caddy/conf.d/*.caddy`). Install on the VPS with:
+#
+#    cp deploy/awaisdesigner.caddy /opt/caddy/conf.d/
+#    docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+#
+#  Upstream is this project's web container by name, reachable over
+#  the shared `proxy` network (see docker-compose.yml). The container
+#  name must match WEB_CONTAINER_NAME (default: awais-portfolio-web).
+# ─────────────────────────────────────────────────────────────
+awaisdesigner.com, www.awaisdesigner.com {
+    encode zstd gzip
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options    "nosniff"
+        Referrer-Policy           "strict-origin-when-cross-origin"
+        -Server
+    }
+
+    @www host www.awaisdesigner.com
+    redir @www https://awaisdesigner.com{uri} permanent
+
+    reverse_proxy awais-portfolio-web:274
+}

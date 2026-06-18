@@ -1,11 +1,17 @@
 # ─────────────────────────────────────────────────────────────
-#  Awais Portfolio — standalone web container
+#  Awais Portfolio — web container behind the shared central Caddy
 #
-#  Independent from Syed Tech (port 786 / Caddy 80/443):
-#    web  — nginx on :274, published publicly on host :274
+#  Public TLS + routing is handled by the central Caddy (/opt/caddy),
+#  which reaches this container as `awais-portfolio-web:274` over the
+#  shared external `proxy` Docker network. The host port is bound to
+#  loopback only (local debug); the public never hits :274 directly.
 #
-#  Syed Tech is untouched. No shared Docker network or Caddy import.
-#  Public URL: http://YOUR_VPS_IP:274  (or Cloudflare Tunnel → :274)
+#  VPS prerequisites (one time):
+#    docker network create proxy
+#    cp deploy/awaisdesigner.caddy /opt/caddy/conf.d/    # then reload Caddy
+#    docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+#
+#  DNS: awaisdesigner.com + www  →  A record to the VPS IP, "DNS only".
 #
 #  CI writes .env from GitHub Secrets; manual: cp .env.example .env
 # ─────────────────────────────────────────────────────────────
@@ -18,8 +24,10 @@ services:
     container_name: ${WEB_CONTAINER_NAME:-awais-portfolio-web}
     restart: unless-stopped
 
+    # Loopback-only host port for local debugging. Public traffic arrives
+    # through the central Caddy over the `proxy` network, not this port.
     ports:
-      - "${WEB_PORT:-274}:${WEB_PORT:-274}"
+      - "127.0.0.1:${WEB_PORT:-274}:${WEB_PORT:-274}"
 
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:${WEB_PORT:-274}/healthz || exit 1"]
@@ -33,3 +41,12 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+    networks:
+      - proxy
+
+networks:
+  # Shared with the central Caddy. Create once on the VPS:
+  #   docker network create proxy
+  proxy:
+    external: true
