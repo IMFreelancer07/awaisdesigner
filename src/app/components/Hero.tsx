@@ -6,7 +6,7 @@ import heroCenterComposite from "../../imports/hero-center-composite.png";
 import verifiedBadge from "../../imports/verified-badge.png";
 
 const stats = [
-  { value: 500, suffix: "+", label: "Satisfied Clients" },
+  { value: 50, suffix: "+", label: "Satisfied Clients" },
   { value: 250, suffix: "+", label: "Projects Done" },
   { value: 2000, suffix: "+", label: "Media Featured" },
 ];
