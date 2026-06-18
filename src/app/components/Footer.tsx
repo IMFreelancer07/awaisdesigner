@@ -74,8 +74,7 @@ export function Footer() {
           <span>© 2026 Awais Designer. All rights reserved.</span>
           <span>Crafted with passion in ISLAMABAD, PK</span>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-[#14A800] transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-[#14A800] transition-colors">Terms of Service</a>
+            <a href="/privacy-policy.html" className="hover:text-[#14A800] transition-colors">Privacy Policy</a>
           </div>
         </div>
       </div>
