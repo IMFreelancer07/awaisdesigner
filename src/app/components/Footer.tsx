@@ -11,6 +11,17 @@ const socials = [
 ];
 
 export function Footer() {
+  const scrollToTop = () => {
+    const home = document.querySelector("#home");
+    if (home) {
+      home.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.scrollingElement?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <footer style={{ background: "rgba(3,3,11,0.28)", borderTop: "1px solid rgba(20,168,0,0.1)" }}>
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -45,9 +56,11 @@ export function Footer() {
 
           {/* Back to top */}
           <motion.button
+            type="button"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={scrollToTop}
+            aria-label="Back to top"
             className="w-10 h-10 rounded-full flex items-center justify-center border border-[#14A800]/30"
             style={{ background: "rgba(20,168,0,0.1)" }}
             title="Back to top"
