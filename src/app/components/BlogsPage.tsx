@@ -476,13 +476,13 @@ export function BlogsPage() {
 
                       <div className="relative grid">
                         <div
-                          className="relative h-[230px] overflow-hidden border-b border-white/7 sm:h-[250px]"
+                          className="relative aspect-[1767/730] overflow-hidden border-b border-white/7"
                           style={{ background: "linear-gradient(145deg, rgba(20,168,0,0.08), rgba(255,255,255,0.03))" }}
                         >
                           <img
                             src={blog.image}
                             alt={`${blog.title} featured visual`}
-                            className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 group-hover:opacity-95"
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.018]"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-[#03030B] via-[#03030B]/38 to-transparent" />
                           <div className="absolute inset-0 bg-[#03030B]/16" />
@@ -554,13 +554,13 @@ export function BlogDetailPage() {
               style={{ background: "linear-gradient(145deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015))" }}
             >
               <div
-                className="relative min-h-[280px] overflow-hidden"
+                className="relative aspect-[1767/730] overflow-hidden"
                 style={{ background: "linear-gradient(145deg, rgba(20,168,0,0.08), rgba(255,255,255,0.03))" }}
               >
                 <img
                   src={blog.image}
                   alt={`${blog.title} featured visual`}
-                  className="absolute inset-0 h-full w-full object-contain"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#03030B] via-[#03030B]/34 to-transparent" />
                 <div className="absolute inset-0 bg-[#03030B]/14" />
