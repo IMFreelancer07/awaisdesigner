@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "motion/react";
-import { Mail, MapPin, Phone, Send, CheckCircle2 } from "lucide-react";
+import { Mail, MapPin, Phone, Send, CheckCircle2, Paperclip, X } from "lucide-react";
 
 const contactInfo = [
   { icon: Mail, label: "Email", value: "contact@awaisdesigner.com", color: "#14A800" },
@@ -12,28 +12,34 @@ const leadEmail = "contact@awaisdesigner.com";
 
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", service: "", message: "" });
+  const [attachment, setAttachment] = useState<File | null>(null);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const submission = new FormData();
+      submission.append("_subject", "New lead from Awais Designer portfolio");
+      submission.append("_template", "table");
+      submission.append("name", form.name);
+      submission.append("email", form.email);
+      submission.append("service", form.service);
+      submission.append("message", form.message);
+
+      if (attachment) {
+        submission.append("attachment", attachment);
+      }
+
       const response = await fetch(`https://formsubmit.co/ajax/${leadEmail}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          _subject: "New lead from Awais Designer portfolio",
-          _template: "table",
-          name: form.name,
-          email: form.email,
-          service: form.service,
-          message: form.message,
-        }),
+        body: submission,
       });
 
       if (!response.ok) {
@@ -43,6 +49,10 @@ export function Contact() {
       setLoading(false);
       setSent(true);
       setForm({ name: "", email: "", service: "", message: "" });
+      setAttachment(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
       setLoading(false);
       alert("Sorry, your message could not be sent. Please email contact@awaisdesigner.com directly.");
@@ -234,6 +244,60 @@ export function Contact() {
                       fontWeight: 500,
                     }}
                   />
+                </div>
+
+                <div className="mb-6">
+                  <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Attachment <span className="font-medium text-[#6868a0]">(Optional)</span></label>
+                  <label
+                    className="flex min-h-[54px] cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-sm transition-all duration-200 hover:border-[#14A800]/40"
+                    style={{
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px dashed rgba(255,255,255,0.14)",
+                    }}
+                  >
+                    <span className="flex min-w-0 items-center gap-3">
+                      <span
+                        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg"
+                        style={{ background: "rgba(20,168,0,0.12)", border: "1px solid rgba(20,168,0,0.25)" }}
+                      >
+                        <Paperclip size={17} className="text-[#14A800]" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-white" style={{ fontWeight: 700 }}>
+                          {attachment ? attachment.name : "Attach brief, reference, or file"}
+                        </span>
+                        <span className="mt-1 block text-xs text-[#6868a0]">
+                          PDF, DOC, JPG, PNG or ZIP
+                        </span>
+                      </span>
+                    </span>
+                    <span className="flex-shrink-0 rounded-full bg-[#14A800] px-3 py-1 text-xs text-white" style={{ fontWeight: 700 }}>
+                      Browse
+                    </span>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      name="attachment"
+                      className="sr-only"
+                      onChange={e => setAttachment(e.target.files?.[0] ?? null)}
+                    />
+                  </label>
+                  {attachment && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAttachment(null);
+                        if (fileInputRef.current) {
+                          fileInputRef.current.value = "";
+                        }
+                      }}
+                      className="mt-3 inline-flex items-center gap-2 text-xs text-[#8888a8] transition-colors hover:text-white"
+                      style={{ fontWeight: 600 }}
+                    >
+                      <X size={14} />
+                      Remove attachment
+                    </button>
+                  )}
                 </div>
 
                 <motion.button
