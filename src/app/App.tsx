@@ -10,12 +10,22 @@ import { FAQ } from "./components/FAQ";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { ProcessPage } from "./components/ProcessPage";
+import { BlogDetailPage, BlogsPage } from "./components/BlogsPage";
 
 export default function App() {
   const isProcessPage = window.location.pathname === "/process";
+  const isBlogsPage = window.location.pathname === "/blogs";
 
   if (isProcessPage) {
     return <ProcessPage />;
+  }
+
+  if (isBlogsPage) {
+    return <BlogsPage />;
+  }
+
+  if (window.location.pathname.startsWith("/blogs/")) {
+    return <BlogDetailPage />;
   }
 
   return (

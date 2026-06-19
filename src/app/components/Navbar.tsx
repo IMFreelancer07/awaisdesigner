@@ -17,6 +17,7 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("Home");
   const isProcessPage = window.location.pathname === "/process";
+  const isBlogsPage = window.location.pathname.startsWith("/blogs");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 28);
@@ -28,6 +29,11 @@ export function Navbar() {
   useEffect(() => {
     if (isProcessPage) {
       setActive("Services");
+      return;
+    }
+
+    if (isBlogsPage) {
+      setActive("Skills");
       return;
     }
 
@@ -60,7 +66,7 @@ export function Navbar() {
       observer.disconnect();
       window.removeEventListener("scroll", setActiveFromTop);
     };
-  }, [isProcessPage]);
+  }, [isProcessPage, isBlogsPage]);
 
   const handleNav = (label: string, href: string) => {
     setActive(label);
@@ -77,6 +83,12 @@ export function Navbar() {
     setActive("Services");
     setMenuOpen(false);
     window.location.href = "/process";
+  };
+
+  const goToBlogs = () => {
+    setActive("Skills");
+    setMenuOpen(false);
+    window.location.href = "/blogs";
   };
 
   return (
@@ -158,6 +170,52 @@ export function Navbar() {
                   </button>
                 </div>
               </div>
+            ) : link.label === "Skills" ? (
+              <div key={link.label} className="group relative">
+                <button
+                  type="button"
+                  onClick={() => handleNav(link.label, link.href)}
+                  className="relative inline-flex items-center gap-1.5 text-white transition-colors hover:text-[#14A800]"
+                  style={{ color: active === link.label ? "#14A800" : undefined, textShadow: active === link.label ? "0 0 18px rgba(20,168,0,0.42)" : undefined }}
+                  aria-haspopup="true"
+                >
+                  {link.label}
+                  <ChevronDown size={15} className="transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+                <div
+                  className="invisible absolute left-1/2 top-full z-[1000] mt-4 w-[246px] -translate-x-1/2 translate-y-2 overflow-hidden rounded-[22px] border p-2.5 opacity-0 shadow-[0_22px_70px_rgba(0,0,0,0.42)] backdrop-blur-2xl transition-all duration-250 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+                  style={{
+                    background: "linear-gradient(145deg, rgba(5,25,10,0.94), rgba(3,3,11,0.88) 48%, rgba(20,168,0,0.16))",
+                    borderColor: "rgba(20,168,0,0.34)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -18px 36px rgba(20,168,0,0.06), 0 22px 70px rgba(0,0,0,0.42), 0 0 34px rgba(20,168,0,0.16)",
+                  }}
+                >
+                  <div
+                    className="pointer-events-none absolute inset-x-4 top-0 h-px"
+                    style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)" }}
+                  />
+                  <div
+                    className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full blur-2xl"
+                    style={{ background: "rgba(20,168,0,0.22)" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleNav("Skills", "#skills")}
+                    className="relative flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left font-['Montserrat'] text-[15px] font-bold text-white transition-all duration-200 hover:translate-x-0.5 hover:bg-white/8 hover:text-[#14A800]"
+                  >
+                    Skills Overview
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#14A800] opacity-70" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={goToBlogs}
+                    className="relative mt-1 flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left font-['Montserrat'] text-[15px] font-bold text-white transition-all duration-200 hover:translate-x-0.5 hover:bg-[#14A800]/14 hover:text-[#14A800]"
+                  >
+                    Blogs
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
             ) : (
               <button
                 key={link.label}
@@ -228,6 +286,16 @@ export function Navbar() {
                       style={{ background: "rgba(20,168,0,0.045)" }}
                     >
                       Working Process
+                    </button>
+                  )}
+                  {link.label === "Skills" && (
+                    <button
+                      type="button"
+                      onClick={goToBlogs}
+                      className="ml-4 mt-1 w-[calc(100%-1rem)] rounded-xl border border-[#14A800]/18 px-4 py-3 text-left font-['Montserrat'] text-[14px] font-bold text-white transition-colors hover:bg-[#14A800]/12 hover:text-[#14A800]"
+                      style={{ background: "rgba(20,168,0,0.045)" }}
+                    >
+                      Blogs
                     </button>
                   )}
                 </div>
