@@ -1,6 +1,9 @@
 import { motion } from "motion/react";
 import { CheckCircle2, Award, Briefcase, Users } from "lucide-react";
 import aboutPortrait from "../../imports/awais-about-portrait.png";
+import adobeCertificatePreview from "../../imports/adobe-certificate-preview.png";
+
+const adobeCertificateUrl = "https://coursera.org/verify/professional-cert/4U9R6B2HNWKZ";
 
 const highlights = [
   "Top Rated creative professional",
@@ -63,14 +66,14 @@ export function About() {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-14 items-center">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
           {/* Image + Badge */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative"
+            className="relative pb-12 md:pb-8"
           >
             <div className="relative w-full max-w-sm mx-auto">
               <div
@@ -90,24 +93,6 @@ export function About() {
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(13,13,26,0.6) 0%, transparent 60%)" }} />
               </div>
 
-              {/* Floating achievement badge */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 rounded-lg px-5 py-4 text-center scale-90 sm:scale-100 origin-bottom-right"
-                style={{
-                  background: "linear-gradient(135deg, rgba(20,168,0,0.95), rgba(9,68,13,0.96))",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  boxShadow: "0 12px 40px rgba(0,0,0,0.4), 0 0 24px rgba(20,168,0,0.24)",
-                }}
-              >
-                <div className="text-white" style={{ fontSize: "13px", fontWeight: 900, letterSpacing: "1.4px", lineHeight: 1.15 }}>
-                  TOP RATED
-                  <br />
-                  DESIGNER
-                </div>
-              </motion.div>
-
               {/* Years badge */}
               <motion.div
                 animate={{ y: [0, 6, 0] }}
@@ -118,6 +103,41 @@ export function About() {
                 <span className="text-white" style={{ fontSize: "1.45rem", fontWeight: 900, lineHeight: 1 }}>7+</span>
                 <span className="text-white/80" style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "1px" }}>YEARS</span>
               </motion.div>
+
+              {/* Adobe certificate */}
+              <motion.a
+                href={adobeCertificateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View Adobe Graphic Designer certificate on Coursera"
+                className="absolute -bottom-8 left-1/2 z-20 block w-[190px] -translate-x-1/2 sm:-bottom-10 sm:left-auto sm:-right-10 sm:w-[225px] sm:translate-x-0"
+                animate={{ rotate: [-4, -1.5, -4], y: [0, -4, 0] }}
+                transition={{ duration: 1.9, repeat: Infinity, ease: "easeInOut" }}
+                whileHover={{ scale: 1.04, rotate: -2 }}
+              >
+                <div
+                  className="overflow-hidden rounded-md"
+                  style={{
+                    background: "rgba(255,255,255,0.98)",
+                    border: "1px solid rgba(255,255,255,0.75)",
+                    boxShadow: "0 16px 42px rgba(0,0,0,0.42), 0 0 26px rgba(20,168,0,0.18)",
+                  }}
+                >
+                  <img
+                    src={adobeCertificatePreview}
+                    alt="Adobe Graphic Designer professional certificate preview"
+                    className="h-auto w-full"
+                  />
+                </div>
+                <motion.div
+                  className="mt-1 text-center text-[#14A800]"
+                  animate={{ x: [-1.5, 1.5, -1.5] }}
+                  transition={{ duration: 1.35, repeat: Infinity, ease: "easeInOut" }}
+                  style={{ fontWeight: 800, fontSize: "0.92rem", textShadow: "0 0 16px rgba(20,168,0,0.35)" }}
+                >
+                  Adobe Certified
+                </motion.div>
+              </motion.a>
             </div>
           </motion.div>
 
