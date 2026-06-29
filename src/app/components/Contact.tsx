@@ -11,52 +11,24 @@ const contactInfo = [
 const leadEmail = "contact@awaisdesigner.com";
 
 export function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", service: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", service: "", budget: "", message: "" });
   const [attachment, setAttachment] = useState<File | null>(null);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const submission = new FormData();
-      submission.append("_subject", "New lead from Awais Designer portfolio");
-      submission.append("_template", "table");
-      submission.append("name", form.name);
-      submission.append("email", form.email);
-      submission.append("service", form.service);
-      submission.append("message", form.message);
-
-      if (attachment) {
-        submission.append("attachment", attachment);
-      }
-
-      const response = await fetch(`https://formsubmit.co/ajax/${leadEmail}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: submission,
-      });
-
-      if (!response.ok) {
-        throw new Error("Lead submission failed");
-      }
-
-      setLoading(false);
-      setSent(true);
-      setForm({ name: "", email: "", service: "", message: "" });
-      setAttachment(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    } catch (error) {
-      setLoading(false);
-      alert("Sorry, your message could not be sent. Please email contact@awaisdesigner.com directly.");
+  const resetForm = () => {
+    setLoading(false);
+    setSent(true);
+    setForm({ name: "", email: "", service: "", budget: "", message: "" });
+    setAttachment(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
+  };
+
+  const handleSubmit = () => {
+    setLoading(true);
   };
 
   return (
@@ -170,11 +142,34 @@ export function Contact() {
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="p-7 rounded-lg border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
+              <>
+              <iframe
+                name="lead-submit-frame"
+                title="Lead form submission"
+                className="hidden"
+                onLoad={() => {
+                  if (loading) {
+                    resetForm();
+                  }
+                }}
+              />
+              <form
+                action={`https://formsubmit.co/${leadEmail}`}
+                method="POST"
+                encType="multipart/form-data"
+                target="lead-submit-frame"
+                onSubmit={handleSubmit}
+                className="p-7 rounded-lg border border-white/5"
+                style={{ background: "rgba(255,255,255,0.02)" }}
+              >
+                <input type="hidden" name="_subject" value="New lead from Awais Designer portfolio" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Your Name</label>
                     <input
+                      name="name"
                       type="text"
                       required
                       placeholder="John Doe"
@@ -191,6 +186,7 @@ export function Contact() {
                   <div>
                     <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Email Address</label>
                     <input
+                      name="email"
                       type="email"
                       required
                       placeholder="john@company.com"
@@ -206,32 +202,52 @@ export function Contact() {
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Service Needed</label>
-                  <select
-                    value={form.service}
-                    onChange={e => setForm({ ...form, service: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      color: form.service ? "white" : "#6868a0",
-                      fontWeight: 500,
-                    }}
-                  >
-                    <option value="" disabled>Select a service...</option>
-                    <option value="branding">Brand Identity Design</option>
-                    <option value="ui">UI/UX Design</option>
-                    <option value="print">Print Design</option>
-                    <option value="illustration">Illustration</option>
-                    <option value="social">Social Media Design</option>
-                    <option value="other">Other</option>
-                  </select>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Service Needed</label>
+                    <select
+                      name="service"
+                      value={form.service}
+                      onChange={e => setForm({ ...form, service: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg text-sm outline-none"
+                      style={{
+                        background: "rgba(255,255,255,0.05)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        color: form.service ? "white" : "#6868a0",
+                        fontWeight: 500,
+                      }}
+                    >
+                      <option value="" disabled>Select a service...</option>
+                      <option value="branding">Brand Identity Design</option>
+                      <option value="ui">UI/UX Design</option>
+                      <option value="print">Print Design</option>
+                      <option value="illustration">Illustration</option>
+                      <option value="social">Social Media Design</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Budget <span className="font-medium text-[#6868a0]">(Optional)</span></label>
+                    <input
+                      name="budget"
+                      type="text"
+                      placeholder="$500 / PKR 150,000"
+                      value={form.budget}
+                      onChange={e => setForm({ ...form, budget: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg text-white text-sm outline-none transition-all duration-200 focus:border-[#14A800]/50"
+                      style={{
+                        background: "rgba(255,255,255,0.05)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        fontWeight: 500,
+                      }}
+                    />
+                  </div>
                 </div>
 
                 <div className="mb-6">
                   <label className="text-[#8888a8] text-xs block mb-2" style={{ fontWeight: 600 }}>Project Details</label>
                   <textarea
+                    name="message"
                     rows={4}
                     required
                     placeholder="Tell me about your project, goals, timeline, and budget..."
@@ -325,6 +341,7 @@ export function Contact() {
                   )}
                 </motion.button>
               </form>
+              </>
             )}
           </motion.div>
         </div>
