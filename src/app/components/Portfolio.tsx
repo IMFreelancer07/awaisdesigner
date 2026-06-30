@@ -1,95 +1,521 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowUpRight, ExternalLink, Eye } from "lucide-react";
-import restaurantFlyers from "../../imports/portfolio-restaurant-flyers.jpg";
-import socialMediaDesigns from "../../imports/portfolio-social-media-designs.jpg";
-import foodMenu from "../../imports/portfolio-food-menu.jpg";
-import companyProfile from "../../imports/portfolio-company-profile.jpg";
-import uiuxDesign from "../../imports/portfolio-uiux-design.jpg";
+import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, Eye } from "lucide-react";
 
 /* ─── data ────────────────────────────────────────────────── */
-const categories = ["All", "Company Profile", "UI/UX", "Social Media", "Print"];
 const profileUrl = "https://www.behance.net/MAwaissiddiq";
 
 const projects = [
   {
-    id: 1,
+    id: 251509707,
     num: "01",
-    title: "Company Profile\n& Branding",
-    client: "Umrah Companions",
-    category: "Company Profile",
-    tag: "Brochure Design",
-    year: "2024",
-    img: companyProfile,
-    accent: "#14A800",
-    stat: "Brand deck",
-    caseStudyUrl: "https://www.behance.net/gallery/234706963/COMPANY-PROFILE",
+    title: "Creative Meta\nAds",
+    client: "Creative Meta Ads",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2026",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/10e084251509707.Y3JvcCwyMTk2LDE3MTcsMCww.png",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/251509707/Creative-Meta-Ads",
     rotate: "-2deg",
     scale: 1,
     featured: true,
   },
   {
-    id: 2,
+    id: 251376003,
     num: "02",
-    title: "UI/UX\nScreen",
-    client: "Taxi Website Design",
-    category: "UI/UX",
-    tag: "Web Design",
-    year: "2024",
-    img: uiuxDesign,
-    accent: "#00C6FF",
-    stat: "Full layout",
-    caseStudyUrl: "https://www.behance.net/gallery/228124911/Web-Design-for-Urban-Transport-Services",
+    title: "Educational Static\nPosts Design",
+    client: "Educational Static Posts Design (ICAS)",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2026",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/92ff33251376003.Y3JvcCw4MDgsNjMyLDAsMA.png",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/251376003/Educational-Static-Posts-Design-%28ICAS%29",
     rotate: "3deg",
     scale: 0.88,
     featured: false,
   },
   {
-    id: 3,
+    id: 245517925,
     num: "03",
-    title: "Creative Ads\nDesigns",
-    client: "AdWorld Prime",
+    title: "Branding",
+    client: "Branding",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2026",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/711210245517925.Y3JvcCw5MjQsNzIzLDAsMA.png",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/245517925/Branding",
+    rotate: "-1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 244222269,
+    num: "04",
+    title: "Web Design\nUI/UX",
+    client: "Web Design UI/UX",
+    category: "UI/UX",
+    tag: "Web Design",
+    year: "2026",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/8a29ab244222269.Y3JvcCwzMDgxLDI0MTAsMTA2LDIyMQ.png",
+    accent: "#00C6FF",
+    stat: "Full layout",
+    caseStudyUrl: "https://www.behance.net/gallery/244222269/Web-Design-UIUX",
+    rotate: "2.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 242901965,
+    num: "05",
+    title: "Social Ads\n2026",
+    client: "Social Ads 2026",
     category: "Social Media",
     tag: "Post Design",
-    year: "2023",
-    img: socialMediaDesigns,
+    year: "2026",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/be48b4242901965.Y3JvcCwzMTcwLDI0ODAsNjU5LDA.png",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/242901965/Social-Ads-2026",
+    rotate: "-3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 239303825,
+    num: "06",
+    title: "MB Group\nCompany Profile",
+    client: "MB Group Company Profile",
+    category: "Company Profile",
+    tag: "Company Profile",
+    year: "2025",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/31a372239303825.Y3JvcCwxNDAwLDEwOTUsMCw2ODk.jpg",
+    accent: "#14A800",
+    stat: "Profile deck",
+    caseStudyUrl: "https://www.behance.net/gallery/239303825/MB-Group-Company-Profile",
+    rotate: "1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 234706963,
+    num: "07",
+    title: "Company\nProfile",
+    client: "COMPANY PROFILE",
+    category: "Company Profile",
+    tag: "Company Profile",
+    year: "2025",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/e45fe5234706963.Y3JvcCwyMzEwLDE4MDcsNTQzLDE4OA.jpg",
+    accent: "#14A800",
+    stat: "Profile deck",
+    caseStudyUrl: "https://www.behance.net/gallery/234706963/COMPANY-PROFILE",
+    rotate: "-2deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 233931545,
+    num: "08",
+    title: "Adworld Prime\nConference",
+    client: "Adworld Prime | Affiliate World Conference",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2025",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/616e41233931545.Y3JvcCwzNjAwLDI4MTUsMCwyMTM.jpg",
     accent: "#FF6B35",
     stat: "Campaign set",
     caseStudyUrl: "https://www.behance.net/gallery/233931545/Adworld-Prime-Affiliate-World-Conference",
+    rotate: "3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 228124911,
+    num: "09",
+    title: "Urban Transport\nWeb Design",
+    client: "Web Design for Urban Transport Services",
+    category: "UI/UX",
+    tag: "Web Design",
+    year: "2025",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/873fe9228124911.Y3JvcCwzMTk2LDI0OTksMjMsMA.jpg",
+    accent: "#00C6FF",
+    stat: "Full layout",
+    caseStudyUrl: "https://www.behance.net/gallery/228124911/Web-Design-for-Urban-Transport-Services",
     rotate: "-1.5deg",
-    scale: 0.9,
+    scale: 0.92,
     featured: false,
   },
   {
-    id: 4,
-    num: "04",
-    title: "Menu\nDesigns",
-    client: "Buffet Menu Design",
-    category: "Print",
-    tag: "Menu Layout",
-    year: "2022",
-    img: restaurantFlyers,
-    accent: "#A855F7",
-    stat: "Menu ready",
-    caseStudyUrl: "https://www.behance.net/gallery/225653467/Menue-Design",
+    id: 226006111,
+    num: "10",
+    title: "ABC TAXIS",
+    client: "ABC TAXIS",
+    category: "UI/UX",
+    tag: "Web Design",
+    year: "2025",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/00908a226006111.Y3JvcCw1MTEzLDQwMDAsNDQzLDA.jpg",
+    accent: "#00C6FF",
+    stat: "Full layout",
+    caseStudyUrl: "https://www.behance.net/gallery/226006111/ABC-TAXIS",
     rotate: "2.5deg",
-    scale: 0.85,
+    scale: 0.92,
     featured: false,
   },
   {
-    id: 5,
-    num: "05",
-    title: "Printing\nDesigns",
-    client: "Restaurant Menu Design",
+    id: 225653467,
+    num: "11",
+    title: "Menu\nDesign",
+    client: "Menue Design",
     category: "Print",
-    tag: "Food Menu",
-    year: "2020",
-    img: foodMenu,
+    tag: "Print Design",
+    year: "2025",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/755c10225653467.Y3JvcCwzMDU4LDIzOTIsMjA0LDA.jpg",
+    accent: "#F59E0B",
+    stat: "Print ready",
+    caseStudyUrl: "https://www.behance.net/gallery/225653467/Menue-Design",
+    rotate: "-3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 222136593,
+    num: "12",
+    title: "Umrah & Ziyarah\nSaudi Arabia",
+    client: "UMRAH & ZIYARAH (SAUDI ARABIA)",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2025",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/3c947a222136593.Y3JvcCwyNjkzLDIxMDYsMCww.jpg",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/222136593/UMRAH-ZIYARAH-%28SAUDI-ARABIA%29",
+    rotate: "1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 215377141,
+    num: "13",
+    title: "2025 Client\nWork",
+    client: "2025 CLIENT's WORK",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/10625c215377141.Y3JvcCwxNjE0LDEyNjIsODcsNDc.png",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/215377141/2025-CLIENTs-WORK",
+    rotate: "-2deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 212417735,
+    num: "14",
+    title: "PIA\nDesigns",
+    client: "PIA Designs",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/eccd31212417735.Y3JvcCw5MDEsNzA1LDEzNiww.jpg",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/212417735/PIA-Designs",
+    rotate: "3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 205619391,
+    num: "15",
+    title: "Travel Agency\nDesigns",
+    client: "TRAVEL AGENCY DESIGNS",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/a375c2205619391.Y3JvcCwzMzY2LDI2MzIsMCww.jpg",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/205619391/TRAVEL-AGENCY-DESIGNS",
+    rotate: "-1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 203581093,
+    num: "16",
+    title: "CHATBOT AI",
+    client: "CHATBOT AI",
+    category: "UI/UX",
+    tag: "Web Design",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/1ee0f7203581093.Y3JvcCwxNjM4LDEyODEsMCw3Mg.jpg",
+    accent: "#00C6FF",
+    stat: "Full layout",
+    caseStudyUrl: "https://www.behance.net/gallery/203581093/CHATBOT-AI",
+    rotate: "2.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 199155077,
+    num: "17",
+    title: "Brand\nGuidelines",
+    client: "Brand Guidelines",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/31352b199155077.Y3JvcCwyMjY5LDE3NzUsNTIyLDA.jpg",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/199155077/Brand-Guidelines",
+    rotate: "-3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 198834389,
+    num: "18",
+    title: "PE TECH",
+    client: "PE TECH",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/224dcf198834389.Y3JvcCwxMDEyLDc5MSw0MiwxOTI.jpg",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/198834389/PE-TECH",
+    rotate: "1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 194442371,
+    num: "19",
+    title: "Logo\nDesign",
+    client: "LOGO DESIGN",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/0eecf2194442371.Y3JvcCwyMzMzLDE4MjQsMCwxMDE2.jpg",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/194442371/LOGO-DESIGN",
+    rotate: "-2deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 190066369,
+    num: "20",
+    title: "Edited Videos\nAnimations",
+    client: "EDITED VIDEOS/ANIMATIONS",
+    category: "Motion",
+    tag: "Motion Design",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/d293f6190066369.Y3JvcCw4MDksNjMyLDAsMA.jpg",
+    accent: "#A855F7",
+    stat: "Motion ready",
+    caseStudyUrl: "https://www.behance.net/gallery/190066369/EDITED-VIDEOSANIMATIONS",
+    rotate: "3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 188480987,
+    num: "21",
+    title: "MHA Ventures\nReal Estate",
+    client: "MHA VENTURES (REAL ESTATE)",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2024",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/fe8d63188480987.Y3JvcCwyMzg4LDE4NjcsMCw2ODU.jpg",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/188480987/MHA-VENTURES-%28REAL-ESTATE%29",
+    rotate: "-1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 177649491,
+    num: "22",
+    title: "Arabic\nDesigns",
+    client: "ARABIC DESIGNS",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/04603f177649491.650a560e9e477.png",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/177649491/ARABIC-DESIGNS",
+    rotate: "2.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 178222523,
+    num: "23",
+    title: "Special\nDesigns",
+    client: "SPECIAL DESIGNS",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/4cef1a178222523.Y3JvcCwxNDQwLDExMjYsMCw0OQ.jpg",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/178222523/SPECIAL-DESIGNS",
+    rotate: "-3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 157203263,
+    num: "24",
+    title: "Digital\nMarketing",
+    client: "Digital Marketing",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2022",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/767f22157203263.64dc8593984c2.png",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/157203263/Digital-Marketing",
+    rotate: "1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 177715289,
+    num: "25",
+    title: "UAE\nDesigns",
+    client: "UAE DESIGNS",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/ce729e177715289.Y3JvcCw0NDc0LDM1MDAsMTEsMA.jpg",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/177715289/UAE-DESIGNS",
+    rotate: "-2deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 173954241,
+    num: "26",
+    title: "Eid Al Adha\nDesigns",
+    client: "EID Al ADHA DESIGNS",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/7d9166173954241.Y3JvcCwzODM1LDMwMDAsMzMyLDA.jpg",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/173954241/EID-Al-ADHA-DESIGNS",
+    rotate: "3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 172622457,
+    num: "27",
+    title: "Web\nBanners",
+    client: "WEB BANNERS",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/f7c413172622457.Y3JvcCw3MzQsNTc0LDcwLDQ5.png",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/172622457/WEB-BANNERS",
+    rotate: "-1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 172621317,
+    num: "28",
+    title: "Real Estate\nDesigning",
+    client: "Real Estate Designing",
+    category: "Branding",
+    tag: "Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/83b88c172621317.Y3JvcCwyMjU5LDE3NjcsNzcxLDM2OQ.jpg",
+    accent: "#14A800",
+    stat: "Case study",
+    caseStudyUrl: "https://www.behance.net/gallery/172621317/Real-Estate-Designing",
+    rotate: "2.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 171398619,
+    num: "29",
+    title: "Carousels",
+    client: "CAROUSELS",
+    category: "Social Media",
+    tag: "Post Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/bf93b1171398619.Y3JvcCw4MDgsNjMyLDAsMA.jpg",
+    accent: "#FF6B35",
+    stat: "Campaign set",
+    caseStudyUrl: "https://www.behance.net/gallery/171398619/CAROUSELS",
+    rotate: "-3deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 171397863,
+    num: "30",
+    title: "Print\nDesigns",
+    client: "PRINT DESIGNS",
+    category: "Print",
+    tag: "Print Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/b6782c171397863.Y3JvcCw3NjUsNTk5LDUwOCwxMjU.jpg",
     accent: "#F59E0B",
     stat: "Print ready",
     caseStudyUrl: "https://www.behance.net/gallery/171397863/PRINT-DESIGNS",
-    rotate: "-3deg",
-    scale: 0.87,
+    rotate: "1.5deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 169577811,
+    num: "31",
+    title: "Product\nDesigns",
+    client: "Product Designs",
+    category: "Print",
+    tag: "Print Design",
+    year: "2023",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/b3455b169577811.Y3JvcCwxMDI3LDgwMywwLDExMQ.jpeg",
+    accent: "#F59E0B",
+    stat: "Print ready",
+    caseStudyUrl: "https://www.behance.net/gallery/169577811/Product-Designs",
+    rotate: "-2deg",
+    scale: 0.92,
+    featured: false,
+  },
+  {
+    id: 156413299,
+    num: "32",
+    title: "Schooling\nSystem",
+    client: "Shooling System",
+    category: "Branding",
+    tag: "Brand System",
+    year: "2022",
+    img: "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/71348f156413299.Y3JvcCwzODM1LDMwMDAsODE2LDA.jpg",
+    accent: "#14A800",
+    stat: "Brand ready",
+    caseStudyUrl: "https://www.behance.net/gallery/156413299/Shooling-System",
+    rotate: "3deg",
+    scale: 0.92,
     featured: false,
   },
 ];
@@ -134,10 +560,12 @@ function CollageCard({
   project,
   onClick,
   isSelected,
+  showMeta = true,
 }: {
   project: typeof projects[0];
   onClick: () => void;
   isSelected: boolean;
+  showMeta?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -196,24 +624,26 @@ function CollageCard({
       />
 
       {/* Top: tag + year */}
-      <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start">
-        <span
-          className="px-3 py-1.5 rounded-full text-[10px]"
-          style={{
-            background: `linear-gradient(135deg, ${project.accent}88, ${project.accent}38)`,
-            color: "#ffffff",
-            border: `1px solid ${project.accent}AA`,
-            fontWeight: 800,
-            backdropFilter: "blur(12px)",
-            boxShadow: `0 8px 18px rgba(0,0,0,0.32), 0 0 0 1px rgba(255,255,255,0.08), 0 0 18px ${project.accent}44`,
-          }}
-        >
-          {project.tag}
-        </span>
-        <span className="text-white/30" style={{ fontSize: "10px", fontWeight: 700 }}>
-          {project.year}
-        </span>
-      </div>
+      {showMeta && (
+        <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start">
+          <span
+            className="px-3 py-1.5 rounded-full text-[10px]"
+            style={{
+              background: `linear-gradient(135deg, ${project.accent}88, ${project.accent}38)`,
+              color: "#ffffff",
+              border: `1px solid ${project.accent}AA`,
+              fontWeight: 800,
+              backdropFilter: "blur(12px)",
+              boxShadow: `0 8px 18px rgba(0,0,0,0.32), 0 0 0 1px rgba(255,255,255,0.08), 0 0 18px ${project.accent}44`,
+            }}
+          >
+            {project.tag}
+          </span>
+          <span className="text-white/30" style={{ fontSize: "10px", fontWeight: 700 }}>
+            {project.year}
+          </span>
+        </div>
+      )}
 
       {/* Bottom info */}
       <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -360,19 +790,90 @@ function DetailPanel({ project, onClose }: { project: typeof projects[0]; onClos
 
 /* ─── Main component ──────────────────────────────────────── */
 export function Portfolio() {
-  const [filter, setFilter] = useState("All");
-  const [selected, setSelected] = useState<number | null>(4);
-
-  const filtered =
-    filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  const [selected, setSelected] = useState<number | null>(projects[0]?.id ?? null);
+  const [carouselProgress, setCarouselProgress] = useState(0);
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const isDraggingRef = useRef(false);
+  const didDragRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartScrollRef = useRef(0);
+  const featuredProjects = projects.slice(0, 5);
+  const carouselProjects = projects.slice(5);
 
   const selectedProject = projects.find((p) => p.id === selected);
 
   const handleCardClick = (id: number) =>
     setSelected((prev) => (prev === id ? null : id));
 
+  const updateCarouselProgress = () => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    setCarouselProgress(maxScroll > 0 ? el.scrollLeft / maxScroll : 0);
+  };
+
+  const scrollCarousel = (direction: -1 | 1) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    el.scrollBy({ left: direction * Math.min(el.clientWidth * 0.82, 720), behavior: "smooth" });
+  };
+
+  const startCarouselDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    isDraggingRef.current = true;
+    didDragRef.current = false;
+    dragStartXRef.current = event.clientX;
+    dragStartScrollRef.current = el.scrollLeft;
+    el.setPointerCapture(event.pointerId);
+  };
+
+  const moveCarouselDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const el = carouselRef.current;
+    if (!el || !isDraggingRef.current) return;
+    const distance = event.clientX - dragStartXRef.current;
+    if (Math.abs(distance) > 6) didDragRef.current = true;
+    el.scrollLeft = dragStartScrollRef.current - distance;
+    updateCarouselProgress();
+  };
+
+  const stopCarouselDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    isDraggingRef.current = false;
+    if (el.hasPointerCapture(event.pointerId)) {
+      el.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  const preventDragClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!didDragRef.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+    didDragRef.current = false;
+  };
+
   return (
     <section id="work" style={{ background: "transparent", position: "relative" }}>
+      <style>{`
+        .portfolio-carousel-scroll {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          cursor: grab;
+          touch-action: pan-y;
+          user-select: none;
+        }
+        .portfolio-carousel-scroll::-webkit-scrollbar {
+          display: none;
+        }
+        .portfolio-carousel-scroll:active {
+          cursor: grabbing;
+        }
+        .portfolio-carousel-scroll img {
+          -webkit-user-drag: none;
+          user-select: none;
+        }
+      `}</style>
       <Marquee />
 
       <div className="py-24">
@@ -409,25 +910,6 @@ export function Portfolio() {
               <p className="text-[#b8c6ff] text-sm max-w-xs md:text-right" style={{ fontWeight: 500, lineHeight: 1.7 }}>
                 Click any project to explore the case study. Hover to interact.
               </p>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((cat) => (
-                  <motion.button
-                    key={cat}
-                    whileTap={{ scale: 0.92 }}
-                    onClick={() => { setFilter(cat); setSelected(null); }}
-                    className="px-4 py-1.5 rounded-full text-xs transition-all duration-200"
-                    style={{
-                      fontWeight: 800,
-                      color: filter === cat ? "white" : "#b8c6ff",
-                      background: filter === cat ? "#14A800" : "rgba(255,255,255,0.04)",
-                      border: `1px solid ${filter === cat ? "#14A800" : "rgba(255,255,255,0.06)"}`,
-                      boxShadow: filter === cat ? "0 4px 18px rgba(20,168,0,0.4)" : "none",
-                    }}
-                  >
-                    {cat}
-                  </motion.button>
-                ))}
-              </div>
             </motion.div>
           </div>
 
@@ -436,25 +918,25 @@ export function Portfolio() {
             {/* Collage board */}
             <div className="flex-1">
               <AnimatePresence mode="popLayout">
-                {filtered.length > 0 ? (
-                  <motion.div key={filter} className="space-y-4">
+                {featuredProjects.length > 0 ? (
+                  <motion.div key="portfolio-projects" className="space-y-4">
 
                     {/* ROW 1: featured large + one tall card */}
-                    {filtered[0] && (
+                    {featuredProjects[0] && (
                       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:h-[360px]">
                         <div className="md:col-span-3 h-[320px] sm:h-[360px] md:h-auto">
                           <CollageCard
-                            project={filtered[0]}
-                            onClick={() => handleCardClick(filtered[0].id)}
-                            isSelected={selected === filtered[0].id}
+                            project={featuredProjects[0]}
+                            onClick={() => handleCardClick(featuredProjects[0].id)}
+                            isSelected={selected === featuredProjects[0].id}
                           />
                         </div>
-                        {filtered[1] && (
+                        {featuredProjects[1] && (
                           <div className="md:col-span-2 h-[260px] sm:h-[300px] md:h-auto">
                             <CollageCard
-                              project={filtered[1]}
-                              onClick={() => handleCardClick(filtered[1].id)}
-                              isSelected={selected === filtered[1].id}
+                              project={featuredProjects[1]}
+                              onClick={() => handleCardClick(featuredProjects[1].id)}
+                              isSelected={selected === featuredProjects[1].id}
                             />
                           </div>
                         )}
@@ -462,9 +944,9 @@ export function Portfolio() {
                     )}
 
                     {/* ROW 2: three equal cards */}
-                    {filtered.slice(2).length > 0 && (
+                    {featuredProjects.slice(2).length > 0 && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:h-[260px]">
-                        {filtered.slice(2, 5).map((p, i) => (
+                        {featuredProjects.slice(2, 5).map((p) => (
                           <div key={p.id} className="h-[250px] sm:h-[260px] lg:h-auto">
                             <CollageCard
                               project={p}
@@ -475,6 +957,7 @@ export function Portfolio() {
                         ))}
                       </div>
                     )}
+
                   </motion.div>
                 ) : (
                   <motion.div
@@ -504,7 +987,7 @@ export function Portfolio() {
                   {selected ? "Case study open →" : "Click a project to explore"}
                 </div>
                 <div className="text-[#222236]" style={{ fontSize: "11px", fontWeight: 700 }}>
-                  {filtered.length} / {projects.length} projects
+                  {projects.length} Behance projects
                 </div>
               </motion.div>
             </div>
@@ -545,6 +1028,93 @@ export function Portfolio() {
               </AnimatePresence>
             </div>
           </div>
+
+          {carouselProjects.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mt-12 relative"
+            >
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-[#14A800]" style={{ fontSize: "11px", fontWeight: 900, letterSpacing: "2.5px" }}>
+                  <div className="w-6 h-px bg-[#14A800]" />
+                  MORE PROJECTS
+                </div>
+                <div className="flex items-center gap-2">
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.08, x: -2 }}
+                    whileTap={{ scale: 0.94 }}
+                    onClick={() => scrollCarousel(-1)}
+                    aria-label="Scroll projects left"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(20,168,0,0.24), rgba(255,255,255,0.05))",
+                      border: "1px solid rgba(20,168,0,0.38)",
+                      boxShadow: "0 12px 30px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.12)",
+                      backdropFilter: "blur(14px)",
+                    }}
+                  >
+                    <ChevronLeft size={18} strokeWidth={3} />
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.08, x: 2 }}
+                    whileTap={{ scale: 0.94 }}
+                    onClick={() => scrollCarousel(1)}
+                    aria-label="Scroll projects right"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors"
+                    style={{
+                      background: "linear-gradient(135deg, #14A800, rgba(20,168,0,0.56))",
+                      border: "1px solid rgba(169,255,157,0.35)",
+                      boxShadow: "0 14px 34px rgba(20,168,0,0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
+                      backdropFilter: "blur(14px)",
+                    }}
+                  >
+                    <ChevronRight size={18} strokeWidth={3} />
+                  </motion.button>
+                </div>
+              </div>
+
+              <div
+                ref={carouselRef}
+                onScroll={updateCarouselProgress}
+                onPointerDown={startCarouselDrag}
+                onPointerMove={moveCarouselDrag}
+                onPointerUp={stopCarouselDrag}
+                onPointerCancel={stopCarouselDrag}
+                onClickCapture={preventDragClick}
+                className="portfolio-carousel-scroll flex gap-5 overflow-x-auto overscroll-x-contain snap-x snap-mandatory pb-5 -mx-6 px-6"
+              >
+                {carouselProjects.map((p) => (
+                  <div key={p.id} className="h-[240px] w-[280px] sm:w-[320px] md:w-[340px] flex-none snap-start">
+                    <CollageCard
+                      project={p}
+                      onClick={() => handleCardClick(p.id)}
+                      isSelected={selected === p.id}
+                      showMeta={false}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div
+                className="relative h-1 rounded-full overflow-hidden mx-6"
+                style={{ background: "rgba(255,255,255,0.07)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.45)" }}
+              >
+                <motion.div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  animate={{ width: `${Math.max(12, carouselProgress * 100)}%` }}
+                  transition={{ duration: 0.18 }}
+                  style={{
+                    background: "linear-gradient(90deg, rgba(169,255,157,0.95), #14A800)",
+                    boxShadow: "0 0 18px rgba(20,168,0,0.55)",
+                  }}
+                />
+              </div>
+            </motion.div>
+          )}
 
           {/* ── Bottom CTA ── */}
           <motion.div
