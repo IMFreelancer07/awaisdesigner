@@ -198,13 +198,14 @@ function CollageCard({
       {/* Top: tag + year */}
       <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start">
         <span
-          className="px-2.5 py-1 rounded-full text-[10px]"
+          className="px-3 py-1.5 rounded-full text-[10px]"
           style={{
-            background: `${project.accent}22`,
-            color: project.accent,
-            border: `1px solid ${project.accent}44`,
+            background: `linear-gradient(135deg, ${project.accent}88, ${project.accent}38)`,
+            color: "#ffffff",
+            border: `1px solid ${project.accent}AA`,
             fontWeight: 800,
-            backdropFilter: "blur(8px)",
+            backdropFilter: "blur(12px)",
+            boxShadow: `0 8px 18px rgba(0,0,0,0.32), 0 0 0 1px rgba(255,255,255,0.08), 0 0 18px ${project.accent}44`,
           }}
         >
           {project.tag}
